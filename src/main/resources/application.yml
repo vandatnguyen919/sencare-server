@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:hogwarts
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    show-sql: true
+  docker:
+    compose:
+      enabled: false
+      file: ./src/main/docker/compose/docker-compose.yaml
+      skip:
+        in-tests: false
+      lifecycle:
+        stop-command: down
+api:
+  endpoint:
+    base-url: /api/v1

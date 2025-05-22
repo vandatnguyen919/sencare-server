@@ -1,0 +1,582 @@
+openapi: 3.0.3
+info:
+  title: SenCare Healthcare Online
+  description: |
+    SenCare Healthcare Online API provides REST APIs.
+  termsOfService: http://swagger.io/terms/
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Development server
+tags:
+  - name: user
+    description: Endpoints related to Hogwarts users
+paths:
+  /users:
+    get:
+      tags:
+        - user
+      summary: Find all users
+      description: Find all users and return them in an array.
+      operationId: findAllUsers
+      responses:
+        200:
+          description: All users found and returned
+          # headers:
+          #   ETag:
+          #     description: An Id for this version of the response
+          #     schema:
+          #       type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseFindAllUsers'
+    post:
+      tags:
+        - user
+      summary: Add a user
+      description: Add a new user and return the saved one. Only users with admin role can perform this operation.
+      operationId: addUser
+      requestBody:
+        description: The new user
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/User'
+              example:
+                username: lily
+                password: ABCDEfghi123456*()
+                enabled: true
+                roles: user
+        required: true
+      responses:
+        200:
+          description: User added and returned
+          # headers:
+          #   ETag:
+          #     description: An Id for this version of the response
+          #     schema:
+          #       type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseAddUser'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUserPostBadRequest'
+      # security:
+      #   - petstore_auth:
+      #       - 'write:pets'
+      #       - 'read:pets'
+  /users/{userId}:
+    get:
+      tags:
+        - user
+      summary: Find a user by Id
+      description: Find a single user and return it.
+      operationId: findUserById
+      parameters:
+        - name: userId
+          in: path
+          description: Id of user to return
+          required: true
+          schema:
+            type: integer
+            example: 2
+      responses:
+        200:
+          description: User found and returned
+          # headers:
+          #   ETag:
+          #     description: An Id for this version of the response
+          #     schema:
+          #       type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseFindOneUser'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUserNotFound'
+    put:
+      tags:
+        - user
+      summary: Update a user
+      description: Update an exisiting user and return the updated one. Only users with admin role can perform this operation.
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          description: Id of user to update
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        description: The user with updated info
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/UserEditableFields'
+              example:
+                username: john-update
+                enabled: true
+                roles: admin user
+        required: true
+      responses:
+        200:
+          description: User updated and returned
+          # headers:
+          #   ETag:
+          #     description: An Id for this version of the response
+          #     schema:
+          #       type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUpdateUser'
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUserPutBadRequest'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUserNotFound'
+    delete:
+      tags:
+        - user
+      summary: Delete a user
+      description: Delete a single user. Only users with admin role can perform this operation.
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          description: Id of user to delete
+          required: true
+          schema:
+            type: integer
+            example: 3
+      responses:
+        200:
+          description: User deleted
+          # headers:
+          #   ETag:
+          #     description: An Id for this version of the response
+          #     schema:
+          #       type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseDelete'
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseUserNotFound'
+  /users/login:
+    post:
+      tags:
+        - user
+      summary: Log user into the system
+      description: Use HTTP basic authentication to log in users and then return
+      operationId: login
+      parameters:
+        - name: username
+          in: query
+          description: The username for login
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password for login in (clear text)
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User logged in
+          # headers:
+          #   X-Rate-Limit:
+          #     description: Calls per hour allowed by the user
+          #     schema:
+          #       type: integer
+          #   X-Expires-After:
+          #     description: Date in UTC when token expires
+          #     schema:
+          #       type: string
+          #       format: date-time
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseToken'
+        401:
+          description: Bad credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponseBadCredentials'
+      security:
+        - BasicAuth: []
+externalDocs:
+  description: Find out more
+  url: http://swagger.io
+components:
+  schemas:
+    User:
+      title: User
+      description: A user
+      allOf: # inheritance and composition
+        - $ref: '#/components/schemas/UserEditableFields'
+        - type: object
+          properties:
+            id:
+              title: Id
+              description: Id of the user
+              type: integer
+              minimum: 1
+              example: 1
+              readOnly: true
+            password:
+              title: Password
+              description: Password of the user
+              type: string
+              minLength: 8
+              maxLength: 30
+              pattern: ^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$
+              example: ABCDEfghi123456*()
+              writeOnly: true
+          required:
+            - id
+            - password
+    UserEditableFields:
+      title: User fields
+      description: Editable fields of the user, used to update the user
+      type: object
+      properties:
+        username:
+          title: Username
+          description: Username of the user
+          type: string
+          minLength: 1
+          maxLength: 30
+          pattern: ^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$
+          example: john
+        enabled:
+          title: User account status
+          description: Status of the user
+          type: boolean
+          example: true
+        roles:
+          title: User roles
+          description: Roles of the user
+          type: string
+          example: admin user
+      required:
+        - username
+        - enabled
+        - roles
+    UserList:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'
+      example:
+        - id: 1
+          username: john
+          enabled: true
+          roles: admin user
+        - id: 2
+          username: eric
+          enabled: true
+          roles: user
+        - id: 3
+          username: tom
+          enabled: false
+          roles: user
+    ApiResponseAddUser:
+      title: API response for add user
+      type: object
+      properties:
+        flag:
+          type: boolean
+          description: Success or not
+        code:
+          type: integer
+          description: Return code
+          example: 200
+        message:
+          type: string
+          example: Add Success
+        data:
+          allOf: # inheritance and composition
+            - $ref: '#/components/schemas/User'
+          example:
+            id: 4
+            username: lily
+            enabled: true
+            roles: user
+    ApiResponseUpdateUser:
+      title: API response for update user
+      type: object
+      properties:
+        flag:
+          type: boolean
+          description: Success or not
+        code:
+          type: integer
+          description: Return code
+          example: 200
+        message:
+          type: string
+          example: Update Success
+        data:
+          allOf: # inheritance and composition
+            - $ref: '#/components/schemas/User'
+          example:
+            id: 1
+            username: john-update
+            enabled: true
+            roles: admin user
+    ApiResponseDelete:
+      title: API response for delete
+      type: object
+      properties:
+        flag:
+          type: boolean
+          description: Success or not
+        code:
+          type: integer
+          description: Return code
+          example: 200
+        message:
+          type: string
+          example: Delete Success
+        data:
+          type: object
+          example: null
+    ApiResponseFindAllUsers:
+      title: API response for find all users
+      type: object
+      properties:
+        flag:
+          type: boolean
+          description: Success or not
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Find All Success
+        data:
+          $ref: '#/components/schemas/UserList'
+    ApiResponseFindOneUser:
+      title: API response for find one user
+      type: object
+      properties:
+        flag:
+          type: boolean
+          description: Success or not
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: Find One Success
+        data:
+          allOf: # inheritance and composition
+            - $ref: '#/components/schemas/User'
+          example:
+            id: 2
+            username: eric
+            enabled: true
+            roles: user
+    ApiResponseToken:
+      title: API response for successful login
+      type: object
+      properties:
+        flag:
+          type: boolean
+          description: Success or not
+          example: true
+        code:
+          type: integer
+          example: 200
+        message:
+          type: string
+          example: User Info and JSON Web Token
+        data:
+          $ref: '#/components/schemas/UserInfoAndToken'
+
+    UserInfoAndToken:
+      title: User information and JWT
+      description: Information about the logged-in user and the JSON web token
+      properties:
+        userInfo:
+          $ref: '#/components/schemas/User'
+        token:
+          type: string
+          example: eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoiam9obiIsImV4cCI6MTY3NDc5NTc1MSwiaWF0IjoxNjc0NzA5MzUxLCJhdXRob3JpdGllcyI6ImFkbWluIHVzZXIifQ.ZaXHGocHD0-HtcmTdflOVaf2-FWUTE7y65VS-Tzli5gaIGKCEjbDCu2n-p10a0DqdunnJBwGnvMB1XGwPNL-6JWr5ECOVOGH8N3H_Wc1j3nItIX2P4voh0cegw1JNyJcGwdBCLdquGQtW2dLMCV_c4peSoQ8UwHdlvABxsBSuUVy7cyiF_vgFDR0M8nNmePJATuroani61TjNxbnSz09WDUZOYxLujxBH27tdYXiVv5JMGVp4ZkyhrRx-bf8_vEryq3HeqztHGrgtKDH7FJbeWvnI4CmNuxvU_AdEjhXyUADLdz-eO3tc8hje1R4kBWnfpX3Mxdj1ZLxo_bvDYrN1A
+    ApiResponseUserPostBadRequest:
+      title: API response for bad request error
+      description: The schema for bad request error
+      type: object
+      properties:
+        flag:
+          title: flag
+          description: Success or not
+          type: boolean
+          example: false
+          readOnly: true
+        code:
+          title: Http status code
+          description: Http status code
+          type: integer
+          example: 400
+          readOnly: true
+        message:
+          title: Message
+          description: The long error message
+          type: string
+          example: Provided arguments are invalid, see data for details.
+          readOnly: true
+        data:
+          $ref: '#/components/schemas/UserPostBadRequest'
+    UserPostBadRequest:
+      title: User Post bad request
+      description: Messages describing a bad request error
+      type: object
+      properties:
+        username:
+          title: Username of the user
+          description: The error message
+          type: string
+          example: username is required.
+        password:
+          title: User password
+          description: The error message
+          type: string
+          example: password is required.
+        roles:
+          title: User roles
+          description: The error message
+          type: string
+          example: roles are required.
+    ApiResponseUserPutBadRequest:
+      title: API response for bad request error
+      description: The schema for bad request error
+      type: object
+      properties:
+        flag:
+          title: flag
+          description: Success or not
+          type: boolean
+          example: false
+          readOnly: true
+        code:
+          title: Http status code
+          description: Http status code
+          type: integer
+          example: 400
+          readOnly: true
+        message:
+          title: Message
+          description: The long error message
+          type: string
+          example: Provided arguments are invalid, see data for details.
+          readOnly: true
+        data:
+          $ref: '#/components/schemas/UserPutBadRequest'
+    UserPutBadRequest:
+      title: User Put bad request
+      description: Messages describing a bad request error
+      type: object
+      properties:
+        username:
+          title: Username of the user
+          description: The error message
+          type: string
+          example: username is required.
+        roles:
+          title: User roles
+          description: The error message
+          type: string
+          example: roles are required.
+    ApiResponseUserNotFound:
+      title: API response for not found error
+      description: The schema for bad request error
+      type: object
+      properties:
+        flag:
+          title: flag
+          description: Success or not
+          type: boolean
+          example: false
+          readOnly: true
+        code:
+          title: Http status code
+          description: Http status code
+          type: integer
+          example: 404
+          readOnly: true
+        message:
+          title: Message
+          description: The long error message
+          type: string
+          example: Could not find user with Id 10 :(
+          readOnly: true
+        data:
+          type: object
+          example: null
+    ApiResponseBadCredentials:
+      title: API response for not found error
+      description: The schema for bad request error
+      type: object
+      properties:
+        flag:
+          title: flag
+          description: Success or not
+          type: boolean
+          example: false
+          readOnly: true
+        code:
+          title: Http status code
+          description: Http status code
+          type: integer
+          example: 401
+          readOnly: true
+        message:
+          title: Message
+          description: The long error message
+          type: string
+          example: username or password is incorrect.
+          readOnly: true
+        data:
+          type: object
+          example: Bad credentials
+  securitySchemes:
+    BasicAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: basic
+    BearerAuth: # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - BearerAuth: [] # secure all endpoints using JWT
