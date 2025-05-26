@@ -1,7 +1,8 @@
 package org.entrepremium.sencare.features.myuser;
 
 import jakarta.transaction.Transactional;
-import org.hibernate.ObjectNotFoundException;
+
+import org.entrepremium.sencare.system.exception.ObjectNotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,7 +28,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public MyUser findById(Integer userId) {
+    public MyUser findById(String userId) {
         return userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("user", userId));
     }
 
@@ -36,7 +37,7 @@ public class UserService implements UserDetailsService {
         return userRepository.save(newUser);
     }
 
-    public MyUser update(Integer userId, MyUser user) {
+    public MyUser update(String userId, MyUser user) {
         return userRepository.findById(userId)
                 .map(oldUser -> {
                     oldUser.setEmail(user.getEmail());
@@ -47,7 +48,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new ObjectNotFoundException("user", userId));
     }
 
-    public void delete(Integer userId) {
+    public void delete(String userId) {
         this.userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("user", userId));
         this.userRepository.deleteById(userId);
     }
