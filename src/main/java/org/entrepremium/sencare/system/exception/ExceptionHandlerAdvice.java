@@ -2,6 +2,7 @@ package org.entrepremium.sencare.system.exception;
 
 import org.entrepremium.sencare.system.Result;
 import org.entrepremium.sencare.system.StatusCode;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AccountStatusException;
@@ -66,6 +67,20 @@ public class ExceptionHandlerAdvice {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     Result handleAccessDeniedException(AccessDeniedException ex) {
         return new Result(false, StatusCode.FORBIDDEN, "No permission.", ex.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    Result handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        String message = ex.getMostSpecificCause().getMessage();
+
+        // Check if it's a unique constraint violation for email
+        if (message.contains("my_user") && message.contains("email")) {
+            return new Result(false, StatusCode.CONFLICT, "Email already exists", "A user with this email is already registered");
+        }
+
+        // Generic constraint violation
+        return new Result(false, StatusCode.CONFLICT, "Database constraint violation", ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
