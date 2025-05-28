@@ -7,15 +7,16 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserToUserDtoConverter implements Converter<MyUser, UserDto> {
+public class UserDtoToUserConverter implements Converter<UserDto, MyUser> {
 
     @Override
-    public UserDto convert(@NonNull MyUser source) {
-        return new UserDto(
-                source.getId(),
-                source.getEmail(),
-                source.isEnabled(),
-                source.getRoles()
-        );
+    public MyUser convert(@NonNull UserDto userDto) {
+
+        MyUser myUser = new MyUser();
+        myUser.setId(userDto.id());
+        myUser.setEmail(userDto.email());
+        myUser.setEnabled(userDto.enabled());
+        myUser.setRoles(userDto.roles());
+        return myUser;
     }
 }
