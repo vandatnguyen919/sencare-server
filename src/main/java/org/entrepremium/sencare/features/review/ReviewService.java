@@ -2,9 +2,9 @@ package org.entrepremium.sencare.features.review;
 
 import jakarta.transaction.Transactional;
 import org.entrepremium.sencare.system.exception.ObjectNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Transactional
@@ -16,8 +16,8 @@ public class ReviewService {
         this.reviewRepository = reviewRepository;
     }
 
-    public List<Review> findAll() {
-        return reviewRepository.findAll();
+    public Page<Review> findAll(Pageable pageable) {
+        return reviewRepository.findAll(pageable);
     }
 
     public Review findById(String reviewId) {
