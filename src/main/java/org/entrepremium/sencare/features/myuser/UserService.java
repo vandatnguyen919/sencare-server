@@ -1,15 +1,14 @@
 package org.entrepremium.sencare.features.myuser;
 
 import jakarta.transaction.Transactional;
-
 import org.entrepremium.sencare.system.exception.ObjectNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Transactional
@@ -24,8 +23,8 @@ public class UserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public List<MyUser> findAll() {
-        return userRepository.findAll();
+    public Page<MyUser> findAll(Pageable pageable) {
+        return this.userRepository.findAll(pageable);
     }
 
     public MyUser findById(String userId) {
@@ -40,7 +39,6 @@ public class UserService implements UserDetailsService {
     public MyUser update(String userId, MyUser user) {
         return userRepository.findById(userId)
                 .map(oldUser -> {
-                    oldUser.setEmail(user.getEmail());
                     oldUser.setEnabled(user.isEnabled());
                     oldUser.setRoles(user.getRoles());
                     return userRepository.save(oldUser);
