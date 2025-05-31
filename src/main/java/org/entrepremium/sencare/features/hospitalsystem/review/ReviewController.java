@@ -1,4 +1,4 @@
-package org.entrepremium.sencare.features.review;
+package org.entrepremium.sencare.features.hospitalsystem.review;
 
 import org.entrepremium.sencare.system.Result;
 import org.entrepremium.sencare.system.StatusCode;
