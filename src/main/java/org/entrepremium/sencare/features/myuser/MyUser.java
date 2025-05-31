@@ -2,10 +2,13 @@ package org.entrepremium.sencare.features.myuser;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.entrepremium.sencare.features.hospitalsystem.hospital.Hospital;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity(name = "my_user")
@@ -30,4 +33,7 @@ public class MyUser {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Hospital> ownedHospitals = new ArrayList<>();
 }

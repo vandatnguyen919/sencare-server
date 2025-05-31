@@ -1,4 +1,4 @@
-package org.entrepremium.sencare.features.review;
+package org.entrepremium.sencare.features.hospitalsystem.review;
 
 import jakarta.validation.Valid;
 import org.entrepremium.sencare.features.review.converter.ReviewDtoToReviewConverter;
