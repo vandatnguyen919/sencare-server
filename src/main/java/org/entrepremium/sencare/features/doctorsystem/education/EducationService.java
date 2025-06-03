@@ -2,6 +2,8 @@ package org.entrepremium.sencare.features.doctorsystem.education;
 
 import jakarta.transaction.Transactional;
 import org.entrepremium.sencare.system.exception.ObjectNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +18,8 @@ public class EducationService {
         this.educationRepository = educationRepository;
     }
 
-    public List<Education> findAll() {
-        return educationRepository.findAll();
+    public Page<Education> findAll(Pageable pageable) {
+        return educationRepository.findAll(pageable);
     }
 
     public Education findById(String eduId) {
@@ -27,10 +29,6 @@ public class EducationService {
 
     public List<Education> findByDoctor(String doctorId) {
         return educationRepository.findByDoctorDoctorId(doctorId);
-    }
-
-    public List<Education> findByCollege(String collegeName) {
-        return educationRepository.findByCollegeNameContaining(collegeName);
     }
 
     public List<Education> findByYear(Integer year) {

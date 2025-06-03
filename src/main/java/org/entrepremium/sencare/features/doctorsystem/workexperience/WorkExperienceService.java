@@ -2,6 +2,8 @@ package org.entrepremium.sencare.features.doctorsystem.workexperience;
 
 import jakarta.transaction.Transactional;
 import org.entrepremium.sencare.system.exception.ObjectNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,8 +19,8 @@ public class WorkExperienceService {
         this.workExperienceRepository = workExperienceRepository;
     }
 
-    public List<WorkExperience> findAll() {
-        return workExperienceRepository.findAll();
+    public Page<WorkExperience> findAll(Pageable pageable) {
+        return workExperienceRepository.findAll(pageable);
     }
 
     public WorkExperience findById(String wexId) {
@@ -28,10 +30,6 @@ public class WorkExperienceService {
 
     public List<WorkExperience> findByDoctor(String doctorId) {
         return workExperienceRepository.findByDoctorDoctorId(doctorId);
-    }
-
-    public List<WorkExperience> findByHospital(String hospitalName) {
-        return workExperienceRepository.findByHospitalNameContaining(hospitalName);
     }
 
     public List<WorkExperience> findByJobTitle(String jobTitle) {

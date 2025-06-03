@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @Transactional
@@ -17,8 +19,8 @@ public class DoctorService {
         this.doctorRepository = doctorRepository;
     }
 
-    public List<Doctor> findAll() {
-        return doctorRepository.findAll();
+    public Page<Doctor> findAll(Pageable pageable) {
+        return doctorRepository.findAll(pageable);
     }
 
     public Doctor findById(String doctorId) {

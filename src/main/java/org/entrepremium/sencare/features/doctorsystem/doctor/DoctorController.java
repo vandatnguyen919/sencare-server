@@ -4,6 +4,8 @@ import org.entrepremium.sencare.features.doctorsystem.doctor.converter.DoctorToD
 import org.entrepremium.sencare.features.doctorsystem.doctor.dto.DoctorDto;
 import org.entrepremium.sencare.system.Result;
 import org.entrepremium.sencare.system.StatusCode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -23,11 +25,9 @@ public class DoctorController {
     }
 
     @GetMapping
-    public Result findAllDoctors() {
-        List<Doctor> foundDoctors = doctorService.findAll();
-        List<DoctorDto> doctorDtos = foundDoctors.stream()
-                .map(doctorToDoctorDtoConverter::convert)
-                .collect(Collectors.toList());
+    public Result findAllDoctors(Pageable pageable) {
+        Page<Doctor> foundDoctors = doctorService.findAll(pageable);
+        Page<DoctorDto> doctorDtos = foundDoctors.map(doctorToDoctorDtoConverter::convert);
         return new Result(true, StatusCode.SUCCESS, "Find All Doctors Success", doctorDtos);
     }
 

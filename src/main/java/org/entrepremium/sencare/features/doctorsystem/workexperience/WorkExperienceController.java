@@ -3,6 +3,8 @@ import org.entrepremium.sencare.features.doctorsystem.workexperience.converter.W
 import org.entrepremium.sencare.features.doctorsystem.workexperience.dto.WorkExperienceDto;
 import org.entrepremium.sencare.system.Result;
 import org.entrepremium.sencare.system.StatusCode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +26,9 @@ public class WorkExperienceController {
     }
 
     @GetMapping
-    public Result findAllWorkExperiences() {
-        List<WorkExperience> foundWorkExperiences = workExperienceService.findAll();
-        List<WorkExperienceDto> workExperienceDtos = foundWorkExperiences.stream()
-                .map(workExperienceToWorkExperienceDtoConverter::convert)
-                .collect(Collectors.toList());
+    public Result findAllWorkExperiences(Pageable pageable) {
+        Page<WorkExperience> foundWorkExperiences = workExperienceService.findAll(pageable);
+        Page<WorkExperienceDto> workExperienceDtos = foundWorkExperiences.map(workExperienceToWorkExperienceDtoConverter::convert);
         return new Result(true, StatusCode.SUCCESS, "Find All Work Experiences Success", workExperienceDtos);
     }
 
@@ -46,15 +46,6 @@ public class WorkExperienceController {
                 .map(workExperienceToWorkExperienceDtoConverter::convert)
                 .collect(Collectors.toList());
         return new Result(true, StatusCode.SUCCESS, "Find Work Experiences By Doctor Success", workExperienceDtos);
-    }
-
-    @GetMapping("/hospital")
-    public Result findWorkExperiencesByCompany(@RequestParam String hospitalName) {
-        List<WorkExperience> foundWorkExperiences = workExperienceService.findByHospital(hospitalName);
-        List<WorkExperienceDto> workExperienceDtos = foundWorkExperiences.stream()
-                .map(workExperienceToWorkExperienceDtoConverter::convert)
-                .collect(Collectors.toList());
-        return new Result(true, StatusCode.SUCCESS, "Find Work Experiences By Company Success", workExperienceDtos);
     }
 
     @GetMapping("/job-title")

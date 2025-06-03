@@ -4,6 +4,8 @@ import org.entrepremium.sencare.features.doctorsystem.education.converter.Educat
 import org.entrepremium.sencare.features.doctorsystem.education.dto.EducationDto;
 import org.entrepremium.sencare.system.Result;
 import org.entrepremium.sencare.system.StatusCode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +25,9 @@ public class EducationController {
     }
 
     @GetMapping
-    public Result findAllEducations() {
-        List<Education> foundEducations = educationService.findAll();
-        List<EducationDto> educationDtos = foundEducations.stream()
-                .map(educationToDtoConverter::convert)
-                .collect(Collectors.toList());
+    public Result findAllEducations(Pageable pageable) {
+        Page<Education> foundEducations = educationService.findAll(pageable);
+        Page<EducationDto> educationDtos = foundEducations.map(educationToDtoConverter::convert);
         return new Result(true, StatusCode.SUCCESS, "Find All Educations Success", educationDtos);
     }
 
@@ -45,15 +45,6 @@ public class EducationController {
                 .map(educationToDtoConverter::convert)
                 .collect(Collectors.toList());
         return new Result(true, StatusCode.SUCCESS, "Find Educations By Doctor Success", educationDtos);
-    }
-
-    @GetMapping("/college")
-    public Result findEducationsByCollege(@RequestParam String collegeName) {
-        List<Education> foundEducations = educationService.findByCollege(collegeName);
-        List<EducationDto> educationDtos = foundEducations.stream()
-                .map(educationToDtoConverter::convert)
-                .collect(Collectors.toList());
-        return new Result(true, StatusCode.SUCCESS, "Find Educations By College Success", educationDtos);
     }
 
     @GetMapping("/year/{year}")
