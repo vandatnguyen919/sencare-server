@@ -1,9 +1,9 @@
 package org.entrepremium.sencare.security;
 
-import org.entrepremium.sencare.features.myuser.MyUser;
-import org.entrepremium.sencare.features.myuser.UserService;
-import org.entrepremium.sencare.features.myuser.converter.UserToUserDtoConverter;
-import org.entrepremium.sencare.features.myuser.dto.UserDto;
+import org.entrepremium.sencare.feature.myuser.MyUser;
+import org.entrepremium.sencare.feature.myuser.UserService;
+import org.entrepremium.sencare.feature.myuser.converter.UserToUserDtoConverter;
+import org.entrepremium.sencare.feature.myuser.dto.UserDto;
 import org.entrepremium.sencare.security.dto.LoginDto;
 import org.entrepremium.sencare.security.dto.RegisterDto;
 import org.entrepremium.sencare.system.Result;
