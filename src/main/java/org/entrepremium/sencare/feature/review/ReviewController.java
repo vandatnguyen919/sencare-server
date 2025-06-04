@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("${api.endpoint.base-url}/reviews")
 public class ReviewController {
 
-    private final ReviewService reviewService;
+    private final org.entrepremium.sencare.features.review.ReviewService reviewService;
     private final ReviewToReviewDtoConverter reviewToReviewDtoConverter;
     private final ReviewDtoToReviewConverter reviewDtoToReviewConverter;
 
-    public ReviewController(ReviewService reviewService,
+    public ReviewController(org.entrepremium.sencare.features.review.ReviewService reviewService,
                             ReviewToReviewDtoConverter reviewToReviewDtoConverter,
                             ReviewDtoToReviewConverter reviewDtoToReviewConverter) {
         this.reviewService = reviewService;
