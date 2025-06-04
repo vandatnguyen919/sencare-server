@@ -9,8 +9,6 @@ import org.entrepremium.sencare.system.StatusCode;
 import org.entrepremium.sencare.system.utils.JwtUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,11 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("${api.endpoint.base-url}/reviews")
 public class ReviewController {
 
-    private final org.entrepremium.sencare.features.review.ReviewService reviewService;
+    private final ReviewService reviewService;
     private final ReviewToReviewDtoConverter reviewToReviewDtoConverter;
     private final ReviewDtoToReviewConverter reviewDtoToReviewConverter;
 
-    public ReviewController(org.entrepremium.sencare.features.review.ReviewService reviewService,
+    public ReviewController(ReviewService reviewService,
                             ReviewToReviewDtoConverter reviewToReviewDtoConverter,
                             ReviewDtoToReviewConverter reviewDtoToReviewConverter) {
         this.reviewService = reviewService;
@@ -38,8 +36,22 @@ public class ReviewController {
     }
 
     @GetMapping("/hospitals/{hospitalId}")
-    public Result getReviewsByHospitalId(@PathVariable String hospitalId, Pageable pageable) {
-        Page<Review> reviewPage = reviewService.findByHospitalId(hospitalId, pageable);
+    public Result getReviewsByHospitalId(Pageable pageable, @PathVariable String hospitalId) {
+        Page<Review> reviewPage = reviewService.findByHospitalId(pageable, hospitalId);
+        Page<ReviewDto> reviewDtoPage = reviewPage.map(reviewToReviewDtoConverter::convert);
+        return new Result(true, StatusCode.SUCCESS, "Find All Success", reviewDtoPage);
+    }
+
+    @GetMapping("/doctors/{doctorId}")
+    public Result getReviewsByDoctorId(Pageable pageable, @PathVariable String doctorId) {
+        Page<Review> reviewPage = reviewService.findByDoctorId(pageable, doctorId);
+        Page<ReviewDto> reviewDtoPage = reviewPage.map(reviewToReviewDtoConverter::convert);
+        return new Result(true, StatusCode.SUCCESS, "Find All Success", reviewDtoPage);
+    }
+
+    @GetMapping("/hosservs/{hosservId}")
+    public Result getReviewsByHosServId(Pageable pageable, @PathVariable String hosservId) {
+        Page<Review> reviewPage = reviewService.findByHosServId(pageable, hosservId);
         Page<ReviewDto> reviewDtoPage = reviewPage.map(reviewToReviewDtoConverter::convert);
         return new Result(true, StatusCode.SUCCESS, "Find All Success", reviewDtoPage);
     }
@@ -58,16 +70,12 @@ public class ReviewController {
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedReviewDto);
     }
 
-    @PostMapping("/hospitals/{hospitalId}")
-    public Result HospitalReview(@PathVariable String hospitalId, @Valid @RequestBody Review newReview) {
-
-        return null;
-    }
-
     @PostMapping("/doctors/{doctorId}")
-    public Result createDoctorReview(@PathVariable String doctorId, @Valid @RequestBody Review newReview) {
-
-        return null;
+    public Result createDoctorReview(@PathVariable String doctorId, @Valid @RequestBody Review newReview, JwtAuthenticationToken jwtAuthenticationToken) {
+        String userId = JwtUtils.getUserId(jwtAuthenticationToken);
+        Review savedReview = reviewService.createDoctorReview(userId, doctorId, newReview);
+        ReviewDto savedReviewDto = reviewToReviewDtoConverter.convert(savedReview);
+        return new Result(true, StatusCode.SUCCESS, "Add Success", savedReviewDto);
     }
 
     @PostMapping("/hosserv/{hosservId}")
@@ -91,22 +99,4 @@ public class ReviewController {
         this.reviewService.delete(reviewId);
         return new Result(true, StatusCode.SUCCESS, "Delete Success");
     }
-
-//    @GetMapping("/user/{userId}")
-//    public Result getReviewsByUserId(@PathVariable String userId) {
-//        List<Review> reviews = reviewService.findByUserId(userId);
-//        List<ReviewDto> reviewDtos = reviews.stream()
-//                .map(reviewToReviewDtoConverter::convert)
-//                .toList();
-//        return new Result(true, StatusCode.SUCCESS, "Find By User Success", reviewDtos);
-//    }
-//
-//    @GetMapping("/service/{serviceId}")
-//    public Result getReviewsByServiceId(@PathVariable String serviceId) {
-//        List<Review> reviews = reviewService.findByServiceId(serviceId);
-//        List<ReviewDto> reviewDtos = reviews.stream()
-//                .map(reviewToReviewDtoConverter::convert)
-//                .toList();
-//        return new Result(true, StatusCode.SUCCESS, "Find By Service Success", reviewDtos);
-//    }
 }

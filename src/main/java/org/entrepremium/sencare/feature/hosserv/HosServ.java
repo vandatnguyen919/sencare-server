@@ -1,10 +1,8 @@
 package org.entrepremium.sencare.feature.hosserv;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.entrepremium.sencare.feature.doctorsystem.doctor.Doctor;
-import org.entrepremium.sencare.feature.hospitalsystem.hospital.Hospital;
+import org.entrepremium.sencare.feature.hospital.Hospital;
 import org.entrepremium.sencare.feature.review.Review;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
