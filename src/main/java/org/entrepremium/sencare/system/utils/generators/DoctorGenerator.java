@@ -1,7 +1,7 @@
 package org.entrepremium.sencare.system.utils.generators;
 
-import org.entrepremium.sencare.features.doctorsystem.doctor.Doctor;
-import org.entrepremium.sencare.features.hospitalsystem.hospital.Hospital;
+import org.entrepremium.sencare.features.doctor.Doctor;
+import org.entrepremium.sencare.features.hospital.Hospital;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

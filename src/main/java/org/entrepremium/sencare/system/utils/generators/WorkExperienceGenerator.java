@@ -1,7 +1,7 @@
 package org.entrepremium.sencare.system.utils.generators;
 
-import org.entrepremium.sencare.features.doctorsystem.doctor.Doctor;
-import org.entrepremium.sencare.features.doctorsystem.workexperience.WorkExperience;
+import org.entrepremium.sencare.features.doctor.Doctor;
+import org.entrepremium.sencare.features.workexperience.WorkExperience;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

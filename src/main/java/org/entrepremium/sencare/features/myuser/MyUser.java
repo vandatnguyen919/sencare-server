@@ -2,7 +2,7 @@ package org.entrepremium.sencare.features.myuser;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.entrepremium.sencare.features.hospitalsystem.hospital.Hospital;
+import org.entrepremium.sencare.features.hospital.Hospital;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 

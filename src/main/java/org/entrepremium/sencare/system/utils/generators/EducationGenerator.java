@@ -1,6 +1,6 @@
 package org.entrepremium.sencare.system.utils.generators;
-import org.entrepremium.sencare.features.doctorsystem.doctor.Doctor;
-import org.entrepremium.sencare.features.doctorsystem.education.Education;
+import org.entrepremium.sencare.features.doctor.Doctor;
+import org.entrepremium.sencare.features.education.Education;
 
 import java.util.ArrayList;
 import java.util.List;
