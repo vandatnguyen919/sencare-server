@@ -1,6 +1,6 @@
 package org.entrepremium.sencare.system.utils.generators;
 
-import org.entrepremium.sencare.features.specialization.Specialization;
+import org.entrepremium.sencare.feature.specialization.Specialization;
 
 import java.util.ArrayList;
 import java.util.List;

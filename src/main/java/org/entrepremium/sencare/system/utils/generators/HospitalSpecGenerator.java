@@ -1,8 +1,8 @@
 package org.entrepremium.sencare.system.utils.generators;
 
-import org.entrepremium.sencare.features.hospital.Hospital;
-import org.entrepremium.sencare.features.hospitalspec.HospitalSpec;
-import org.entrepremium.sencare.features.specialization.Specialization;
+import org.entrepremium.sencare.feature.hospital.Hospital;
+import org.entrepremium.sencare.feature.hospitalspec.HospitalSpec;
+import org.entrepremium.sencare.feature.specialization.Specialization;
 
 import java.util.ArrayList;
 import java.util.Collections;
