@@ -19,6 +19,6 @@ public class Specialization {
     private String specName;
     private String specDescription;
 
-    @OneToMany(mappedBy = "specialization", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "specialization", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<HospitalSpec> hospitalSpecs = new ArrayList<>();
 }

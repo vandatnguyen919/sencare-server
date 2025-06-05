@@ -71,7 +71,7 @@ public class HospitalSpecGenerator {
         List<HospitalSpec> hospitalSpecs = new ArrayList<>();
 
         // Ensure all hospitals have common essential specializations
-        String[] essentialSpecs = {"Emergency Medicine", "Internal Medicine", "General Surgery"};
+        String[] essentialSpecs = {"Cấp cứu", "Nội tổng hợp", "Phẫu thuật tổng hợp"};
 
         for (Hospital hospital : hospitals) {
             // Add essential specializations
@@ -91,9 +91,9 @@ public class HospitalSpecGenerator {
             Random random = new Random();
             List<Specialization> remainingSpecs = new ArrayList<>(specializations);
             remainingSpecs.removeIf(spec ->
-                    spec.getSpecName().equals("Emergency Medicine") ||
-                            spec.getSpecName().equals("Internal Medicine") ||
-                            spec.getSpecName().equals("General Surgery")
+                    spec.getSpecName().equals("Cấp cứu") ||
+                            spec.getSpecName().equals("Nội tổng hợp") ||
+                            spec.getSpecName().equals("Phẫu thuật tổng hợp")
             );
 
             Collections.shuffle(remainingSpecs);

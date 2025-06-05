@@ -11,42 +11,47 @@ import java.util.Random;
 public class WorkExperienceGenerator {
 
     private static final String[] HOSPITAL_NAMES = {
-            "Mayo Clinic", "Cleveland Clinic", "Johns Hopkins Hospital",
-            "Massachusetts General Hospital", "UCLA Medical Center", "NewYork-Presbyterian Hospital",
-            "UCSF Medical Center", "Cedars-Sinai Medical Center", "Mount Sinai Hospital",
-            "Houston Methodist Hospital", "Northwestern Memorial Hospital", "Duke University Hospital",
-            "Vanderbilt University Medical Center", "Barnes-Jewish Hospital", "Tampa General Hospital",
-            "Children's Hospital of Philadelphia", "Boston Children's Hospital", "Seattle Children's Hospital",
-            "Kaiser Permanente Medical Center", "Scripps Health System", "Adventist Health System",
-            "HCA Healthcare", "Tenet Healthcare", "Community Health Systems"
+            "Bệnh viện Bạch Mai", "Bệnh viện Chợ Rẫy", "Bệnh viện Việt Đức",
+            "Bệnh viện K", "Bệnh viện Đại học Y Hà Nội", "Bệnh viện 108",
+            "Bệnh viện Nhân dân 115", "Bệnh viện Thống Nhất", "Bệnh viện Từ Dũ",
+            "Bệnh viện Nhi đồng 1", "Bệnh viện Nhi đồng 2", "Bệnh viện Mắt TP.HCM",
+            "Bệnh viện Tim Hà Nội", "Bệnh viện Ung bướu TP.HCM", "Bệnh viện E",
+            "Bệnh viện Đại học Y dược TP.HCM", "Bệnh viện Hữu nghị Việt Đức",
+            "Bệnh viện Saint Paul", "Bệnh viện FV", "Bệnh viện Vinmec",
+            "Bệnh viện Đa khoa Medlatec", "Bệnh viện Đa khoa Hồng Ngọc",
+            "Bệnh viện Columbia Asia", "Bệnh viện Đa khoa Tâm Anh",
+            "Bệnh viện Đa khoa Quốc tế Thu Cúc", "Bệnh viện Y học cổ truyền Trung ương",
+            "Bệnh viện Quân y 103", "Bệnh viện Trung ương Huế", "Bệnh viện Đà Nẵng",
+            "Bệnh viện Đa khoa tỉnh An Giang", "Bệnh viện Đa khoa Đồng Nai"
     };
 
     private static final String[] JOB_TITLES = {
-            "Chief of Cardiology", "Senior Attending Physician", "Medical Director",
-            "Department Head", "Clinical Associate", "Resident Physician",
-            "Fellow", "Staff Physician", "Consulting Physician",
-            "Emergency Medicine Physician", "Hospitalist", "Chief Medical Officer",
-            "Associate Medical Director", "Clinical Instructor", "Assistant Professor of Medicine",
-            "Associate Professor", "Professor of Medicine", "Division Chief",
-            "Program Director", "Medical Consultant"
+            "Trưởng khoa Tim mạch", "Bác sĩ điều trị", "Giám đốc Y khoa",
+            "Trưởng khoa", "Bác sĩ lâm sàng", "Bác sĩ nội trú",
+            "Bác sĩ chuyên khoa", "Bác sĩ chuyên môn", "Bác sĩ tư vấn",
+            "Bác sĩ cấp cứu", "Bác sĩ nội khoa", "Giám đốc Bệnh viện",
+            "Phó Giám đốc Y khoa", "Giảng viên lâm sàng", "Trợ lý Giáo sư Y khoa",
+            "Phó Giáo sư", "Giáo sư Y khoa", "Trưởng bộ môn",
+            "Giám đốc Chương trình", "Bác sĩ cố vấn", "Phó Trưởng khoa",
+            "Bác sĩ trưởng", "Bác sĩ chính", "Bác sĩ cao cấp"
     };
 
     private static final String[] JOB_DESCRIPTIONS = {
-            "Provided comprehensive patient care and supervised medical residents in clinical settings.",
-            "Led multidisciplinary team in developing treatment protocols and patient care standards.",
-            "Conducted clinical research and published findings in peer-reviewed medical journals.",
-            "Managed department operations and implemented quality improvement initiatives.",
-            "Delivered specialized medical care and participated in medical education programs.",
-            "Coordinated patient care across multiple departments and healthcare disciplines.",
-            "Developed and implemented evidence-based treatment guidelines for patient populations.",
-            "Supervised medical students and residents in clinical training and patient care.",
-            "Collaborated with healthcare teams to optimize patient outcomes and safety measures.",
-            "Participated in medical committees and contributed to hospital policy development.",
-            "Provided emergency medical care and trauma response in acute care settings.",
-            "Conducted medical consultations and second opinions for complex medical cases.",
-            "Led quality assurance programs and participated in medical peer review processes.",
-            "Managed clinical trials and research studies in specialized medical areas.",
-            "Provided telemedicine services and remote patient monitoring capabilities."
+            "Cung cấp dịch vụ chăm sóc bệnh nhân toàn diện và giám sát các bác sĩ nội trú trong môi trường lâm sàng.",
+            "Lãnh đạo nhóm đa chuyên khoa trong việc phát triển quy trình điều trị và tiêu chuẩn chăm sóc bệnh nhân.",
+            "Tiến hành nghiên cứu lâm sàng và công bố kết quả trên các tạp chí y học có uy tín.",
+            "Quản lý hoạt động khoa và thực hiện các sáng kiến cải thiện chất lượng.",
+            "Cung cấp dịch vụ y tế chuyên khoa và tham gia các chương trình giáo dục y học.",
+            "Phối hợp chăm sóc bệnh nhân giữa nhiều khoa và chuyên ngành y tế.",
+            "Phát triển và thực hiện hướng dẫn điều trị dựa trên bằng chứng cho các nhóm bệnh nhân.",
+            "Giám sát sinh viên y khoa và bác sĩ nội trú trong đào tạo lâm sàng và chăm sóc bệnh nhân.",
+            "Hợp tác với các nhóm y tế để tối ưu hóa kết quả điều trị và các biện pháp an toàn bệnh nhân.",
+            "Tham gia các ủy ban y khoa và đóng góp vào việc phát triển chính sách bệnh viện.",
+            "Cung cấp dịch vụ y tế cấp cứu và ứng phó chấn thương trong môi trường chăm sóc cấp tính.",
+            "Tiến hành tư vấn y khoa và ý kiến thứ hai cho các ca bệnh phức tạp.",
+            "Dẫn dắt các chương trình đảm bảo chất lượng và tham gia quá trình đánh giá chuyên môn y khoa.",
+            "Quản lý các thử nghiệm lâm sàng và nghiên cứu trong các lĩnh vực y học chuyên biệt.",
+            "Cung cấp dịch vụ y tế từ xa và khả năng theo dõi bệnh nhân từ xa."
     };
 
     public static List<WorkExperience> generateSampleWorkExperiences(List<Doctor> doctors) {
@@ -115,7 +120,7 @@ public class WorkExperienceGenerator {
         WorkExperience firstJob = createWorkExperience(
                 doctor,
                 HOSPITAL_NAMES[random.nextInt(HOSPITAL_NAMES.length)],
-                "Resident Physician",
+                "Bác sĩ nội trú",
                 firstJobStart,
                 firstJobStart.plusYears(2 + random.nextInt(2))
         );
@@ -126,7 +131,7 @@ public class WorkExperienceGenerator {
         WorkExperience secondJob = createWorkExperience(
                 doctor,
                 HOSPITAL_NAMES[random.nextInt(HOSPITAL_NAMES.length)],
-                "Staff Physician",
+                "Bác sĩ chuyên môn",
                 secondJobStart,
                 secondJobStart.plusYears(3 + random.nextInt(3))
         );
@@ -137,7 +142,7 @@ public class WorkExperienceGenerator {
         WorkExperience currentJob = createWorkExperience(
                 doctor,
                 HOSPITAL_NAMES[random.nextInt(HOSPITAL_NAMES.length)],
-                "Senior Attending Physician",
+                "Bác sĩ điều trị",
                 currentJobStart,
                 null // Current position
         );

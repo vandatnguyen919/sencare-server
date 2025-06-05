@@ -27,9 +27,9 @@ public class Hospital {
     @JoinColumn(name = "user_id")
     private MyUser user;
 
-    @OneToMany(mappedBy = "hospital", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "hospital", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Doctor> doctors = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hospital", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "hospital", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<HospitalSpec> hospitalSpecs = new ArrayList<>();
 }
