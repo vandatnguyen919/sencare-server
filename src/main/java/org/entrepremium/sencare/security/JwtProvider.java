@@ -1,6 +1,6 @@
 package org.entrepremium.sencare.security;
 
-import org.entrepremium.sencare.features.myuser.MyUserPrincipal;
+import org.entrepremium.sencare.feature.myuser.MyUserPrincipal;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
