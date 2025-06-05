@@ -2,8 +2,9 @@ package org.entrepremium.sencare.security;
 
 
 import jakarta.transaction.Transactional;
-import org.entrepremium.sencare.features.myuser.MyUser;
-import org.entrepremium.sencare.features.myuser.UserService;
+import lombok.RequiredArgsConstructor;
+import org.entrepremium.sencare.feature.myuser.MyUser;
+import org.entrepremium.sencare.feature.myuser.UserService;
 import org.entrepremium.sencare.security.converter.RegisterDtoToUserConverter;
 import org.entrepremium.sencare.security.dto.LoginDto;
 import org.entrepremium.sencare.security.dto.RegisterDto;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
     private final JwtProvider jwtProvider;
@@ -25,13 +27,6 @@ public class AuthService {
     private final RegisterDtoToUserConverter registerDtoToUserConverter;
 
     private final UserService userService;
-
-    public AuthService(JwtProvider jwtProvider, AuthenticationManager authenticationManager, RegisterDtoToUserConverter registerDtoToUserConverter, UserService userService) {
-        this.jwtProvider = jwtProvider;
-        this.authenticationManager = authenticationManager;
-        this.registerDtoToUserConverter = registerDtoToUserConverter;
-        this.userService = userService;
-    }
 
     public String login(LoginDto loginDto) {
 

@@ -1,7 +1,7 @@
 package org.entrepremium.sencare.system.utils.generators;
 
-import org.entrepremium.sencare.features.hospital.Hospital;
-import org.entrepremium.sencare.features.myuser.MyUser;
+import org.entrepremium.sencare.feature.hospital.Hospital;
+import org.entrepremium.sencare.feature.myuser.MyUser;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
