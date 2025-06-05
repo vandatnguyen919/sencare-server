@@ -1,6 +1,7 @@
 package org.entrepremium.sencare.feature.hosserv;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.entrepremium.sencare.feature.hosserv.converter.HosServDtoToHosServConverter;
 import org.entrepremium.sencare.feature.hosserv.converter.HosServToHosServDtoConverter;
 import org.entrepremium.sencare.feature.hosserv.dto.HosServDto;
@@ -12,19 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("${api.endpoint.base-url}/hosserv")
+@RequiredArgsConstructor
 public class HosServController {
 
     private final HosServService hosServService;
     private final HosServToHosServDtoConverter hosServToHosServDtoConverter;
     private final HosServDtoToHosServConverter hosServDtoToHosServConverter;
-
-    public HosServController(HosServService hosServService,
-                             HosServToHosServDtoConverter hosServToHosServDtoConverter,
-                             HosServDtoToHosServConverter hosServDtoToHosServConverter) {
-        this.hosServService = hosServService;
-        this.hosServToHosServDtoConverter = hosServToHosServDtoConverter;
-        this.hosServDtoToHosServConverter = hosServDtoToHosServConverter;
-    }
 
     @GetMapping
     public Result getAllHosServ(Pageable pageable) {

@@ -14,6 +14,6 @@ public class ReviewDtoToReviewConverter implements Converter<ReviewDto, Review> 
         Review review = new Review();
         review.setRating(source.rating());
         review.setContent(source.content());
-        return null;
+        return review;
     }
 }

@@ -1,5 +1,6 @@
 package org.entrepremium.sencare.security;
 
+import lombok.RequiredArgsConstructor;
 import org.entrepremium.sencare.feature.myuser.MyUser;
 import org.entrepremium.sencare.feature.myuser.UserService;
 import org.entrepremium.sencare.feature.myuser.converter.UserToUserDtoConverter;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("${api.endpoint.base-url}/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
@@ -23,12 +25,6 @@ public class AuthController {
     private final UserService userService;
 
     private final UserToUserDtoConverter userToUserDtoConverter;
-
-    public AuthController(AuthService authService, UserService userService, UserToUserDtoConverter userToUserDtoConverter) {
-        this.authService = authService;
-        this.userService = userService;
-        this.userToUserDtoConverter = userToUserDtoConverter;
-    }
 
     @PostMapping("/login")
     public Result login(@RequestBody LoginDto loginDto) {

@@ -1,6 +1,7 @@
 package org.entrepremium.sencare.feature.myuser;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.entrepremium.sencare.system.exception.ObjectNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,16 +13,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
-
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     public Page<MyUser> findAll(Pageable pageable) {
         return this.userRepository.findAll(pageable);

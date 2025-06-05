@@ -1,6 +1,7 @@
 package org.entrepremium.sencare.feature.myuser;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.entrepremium.sencare.feature.myuser.converter.UserDtoToUserConverter;
 import org.entrepremium.sencare.feature.myuser.converter.UserToUserDtoConverter;
 import org.entrepremium.sencare.feature.myuser.dto.UserDto;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("${api.endpoint.base-url}/users")
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
@@ -19,12 +21,6 @@ public class UserController {
     private final UserToUserDtoConverter userToUserDtoConverter;
 
     private final UserDtoToUserConverter userDtoToUserConverter;
-
-    public UserController(UserService userService, UserToUserDtoConverter userToUserDtoConverter, UserDtoToUserConverter userDtoToUserConverter) {
-        this.userService = userService;
-        this.userToUserDtoConverter = userToUserDtoConverter;
-        this.userDtoToUserConverter = userDtoToUserConverter;
-    }
 
     // Using Pageable directly in the controller method signature,
     // let Spring handles the instantiation and population of PageRequest object based on the request parameters.
