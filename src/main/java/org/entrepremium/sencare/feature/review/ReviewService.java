@@ -60,6 +60,7 @@ public class ReviewService {
 
         review.setCreatedBy(user);
         review.setHosServ(hosServ);
+        review.setHospital(hosServ.getHospital());
         return reviewRepository.save(review);
     }
 
@@ -69,6 +70,7 @@ public class ReviewService {
 
         review.setCreatedBy(user);
         review.setDoctor(doctor);
+        review.setHospital(doctor.getHospital());
         return reviewRepository.save(review);
     }
 

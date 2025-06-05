@@ -1,5 +1,6 @@
 package org.entrepremium.sencare.system;
 
+import lombok.RequiredArgsConstructor;
 import org.entrepremium.sencare.feature.doctor.Doctor;
 import org.entrepremium.sencare.feature.doctor.DoctorService;
 import org.entrepremium.sencare.feature.education.Education;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class DBDataInitializer implements CommandLineRunner {
 
     private final DoctorService doctorService;
@@ -31,22 +33,6 @@ public class DBDataInitializer implements CommandLineRunner {
     private final SpecializationService specializationService;
     private final HospitalSpecService hospitalSpecService;
     private final UserService myUserService; // Assuming you have this service
-
-    public DBDataInitializer(DoctorService doctorService,
-                             EducationService educationService,
-                             WorkExperienceService workExperienceService,
-                             HospitalService hospitalService,
-                             SpecializationService specializationService,
-                             HospitalSpecService hospitalSpecService,
-                             UserService myUserService) {
-        this.doctorService = doctorService;
-        this.educationService = educationService;
-        this.workExperienceService = workExperienceService;
-        this.hospitalService = hospitalService;
-        this.specializationService = specializationService;
-        this.hospitalSpecService = hospitalSpecService;
-        this.myUserService = myUserService;
-    }
 
     @Override
     public void run(String... args) throws Exception {

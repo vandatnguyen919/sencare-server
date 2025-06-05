@@ -11,6 +11,10 @@ public record ReviewDto(
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime createdAt,
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime updatedAt
+    LocalDateTime updatedAt,
+    String hospitalId,
+    String hosServId,
+    String doctorId,
+    String createdById
 ) {
 }

@@ -1,6 +1,7 @@
 package org.entrepremium.sencare.feature.review;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.entrepremium.sencare.feature.review.converter.ReviewDtoToReviewConverter;
 import org.entrepremium.sencare.feature.review.converter.ReviewToReviewDtoConverter;
 import org.entrepremium.sencare.feature.review.dto.ReviewDto;
@@ -14,19 +15,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("${api.endpoint.base-url}/reviews")
+@RequiredArgsConstructor
 public class ReviewController {
 
     private final ReviewService reviewService;
     private final ReviewToReviewDtoConverter reviewToReviewDtoConverter;
     private final ReviewDtoToReviewConverter reviewDtoToReviewConverter;
-
-    public ReviewController(ReviewService reviewService,
-                            ReviewToReviewDtoConverter reviewToReviewDtoConverter,
-                            ReviewDtoToReviewConverter reviewDtoToReviewConverter) {
-        this.reviewService = reviewService;
-        this.reviewToReviewDtoConverter = reviewToReviewDtoConverter;
-        this.reviewDtoToReviewConverter = reviewDtoToReviewConverter;
-    }
 
     @GetMapping
     public Result getAllReviews(Pageable pageable) {

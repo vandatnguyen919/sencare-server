@@ -1,6 +1,7 @@
 package org.entrepremium.sencare.feature.hosserv;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.entrepremium.sencare.system.exception.ObjectNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,13 +9,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class HosServService {
 
     private final HosServRepository hosServRepository;
-
-    public HosServService(HosServRepository hosServRepository) {
-        this.hosServRepository = hosServRepository;
-    }
 
     public Page<HosServ> findAll(Pageable pageable) {
         return hosServRepository.findAll(pageable);

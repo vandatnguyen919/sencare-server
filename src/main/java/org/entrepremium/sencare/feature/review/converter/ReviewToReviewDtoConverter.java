@@ -16,7 +16,11 @@ public class ReviewToReviewDtoConverter implements Converter<Review, ReviewDto> 
                 source.getRating(),
                 source.getContent(),
                 source.getCreatedAt(),
-                source.getUpdatedAt()
+                source.getUpdatedAt(),
+                source.getHospital() != null ? source.getHospital().getHospitalId() : null,
+                source.getHosServ() != null ? source.getHosServ().getId() : null,
+                source.getDoctor() != null ? source.getDoctor().getDoctorId() : null,
+                source.getCreatedBy() != null ? source.getCreatedBy().getId() : null
         );
     }
 }
