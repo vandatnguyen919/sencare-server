@@ -14,6 +14,7 @@ public record HosServDto(
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         LocalDateTime createdAt,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        LocalDateTime updatedAt
+        LocalDateTime updatedAt,
+        String hospitalId
 ) {
 }

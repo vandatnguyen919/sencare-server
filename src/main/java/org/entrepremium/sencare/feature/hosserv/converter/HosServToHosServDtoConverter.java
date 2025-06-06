@@ -18,7 +18,8 @@ public class HosServToHosServDtoConverter implements Converter<HosServ, HosServD
                 source.getServImage(),
                 source.isAvailable(),
                 source.getCreatedAt(),
-                source.getUpdatedAt()
+                source.getUpdatedAt(),
+                source.getHospital() != null ? source.getHospital().getHospitalId() : null
         );
     }
 }
