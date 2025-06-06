@@ -2,6 +2,8 @@ package org.entrepremium.sencare.feature.hosserv;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.entrepremium.sencare.feature.hospital.Hospital;
+import org.entrepremium.sencare.feature.hospital.HospitalService;
 import org.entrepremium.sencare.feature.hosserv.converter.HosServDtoToHosServConverter;
 import org.entrepremium.sencare.feature.hosserv.converter.HosServToHosServDtoConverter;
 import org.entrepremium.sencare.feature.hosserv.dto.HosServDto;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class HosServController {
 
     private final HosServService hosServService;
+    private final HospitalService hospitalService;
     private final HosServToHosServDtoConverter hosServToHosServDtoConverter;
     private final HosServDtoToHosServConverter hosServDtoToHosServConverter;
 
@@ -34,8 +37,10 @@ public class HosServController {
         return new Result(true, StatusCode.SUCCESS, "Find One Success", hosServDto);
     }
 
-    @PostMapping
-    public Result addHosServ(@Valid @RequestBody HosServ newHosServ) {
+    @PostMapping("/hospitals/{hospitalId}")
+    public Result addHosServ(@PathVariable String hospitalId, @Valid @RequestBody HosServ newHosServ) {
+        Hospital hospital = hospitalService.findById(hospitalId);
+        newHosServ.setHospital(hospital);
         HosServ savedHosServ = hosServService.save(newHosServ);
         HosServDto savedHosServDto = hosServToHosServDtoConverter.convert(savedHosServ);
         return new Result(true, StatusCode.SUCCESS, "Add Success", savedHosServDto);
