@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.entrepremium.sencare.feature.doctor.Doctor;
-import org.entrepremium.sencare.feature.hospitalspec.HospitalSpec;
 import org.entrepremium.sencare.feature.myuser.MyUser;
+import org.entrepremium.sencare.feature.specialization.Specialization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,6 @@ public class Hospital {
     @OneToMany(mappedBy = "hospital", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Doctor> doctors = new ArrayList<>();
 
-    @OneToMany(mappedBy = "hospital", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private List<HospitalSpec> hospitalSpecs = new ArrayList<>();
+    @ManyToMany(mappedBy = "hospitals", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Specialization> specializations = new ArrayList<>();
 }

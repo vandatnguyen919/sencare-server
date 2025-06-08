@@ -3,7 +3,7 @@ package org.entrepremium.sencare.feature.specialization;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.entrepremium.sencare.feature.hospitalspec.HospitalSpec;
+import org.entrepremium.sencare.feature.hospital.Hospital;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,6 @@ public class Specialization {
     private String specName;
     private String specDescription;
 
-    @OneToMany(mappedBy = "specialization", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private List<HospitalSpec> hospitalSpecs = new ArrayList<>();
+    @ManyToMany(mappedBy = "specializations", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Hospital> hospitals = new ArrayList<>();
 }

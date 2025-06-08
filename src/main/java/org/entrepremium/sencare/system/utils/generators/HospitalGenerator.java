@@ -2,6 +2,7 @@ package org.entrepremium.sencare.system.utils.generators;
 
 import org.entrepremium.sencare.feature.hospital.Hospital;
 import org.entrepremium.sencare.feature.myuser.MyUser;
+import org.entrepremium.sencare.feature.specialization.Specialization;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -99,7 +100,29 @@ public class HospitalGenerator {
         return availableUrls.get(random.nextInt(availableUrls.size()));
     }
 
-    public static List<Hospital> generateSampleHospitals(List<MyUser> users) {
+    /**
+     * Assigns random specializations to a hospital
+     */
+    private static void assignSpecializationsToHospital(Hospital hospital, List<Specialization> availableSpecializations) {
+        if (availableSpecializations == null || availableSpecializations.isEmpty()) {
+            return;
+        }
+
+        Random random = new Random();
+        // Each hospital gets 2-6 specializations
+        int numSpecializations = 2 + random.nextInt(5);
+
+        List<Specialization> shuffledSpecs = new ArrayList<>(availableSpecializations);
+        java.util.Collections.shuffle(shuffledSpecs);
+
+        for (int i = 0; i < Math.min(numSpecializations, shuffledSpecs.size()); i++) {
+            Specialization spec = shuffledSpecs.get(i);
+            hospital.getSpecializations().add(spec);
+            spec.getHospital().add(hospital);
+        }
+    }
+
+    public static List<Hospital> generateSampleHospitals(List<MyUser> users, List<Specialization> specializations) {
         List<Hospital> hospitals = new ArrayList<>();
         Random random = new Random();
 
@@ -123,13 +146,16 @@ public class HospitalGenerator {
                 hospital.setUser(user);
             }
 
+            // Assign specializations to hospital
+            assignSpecializationsToHospital(hospital, specializations);
+
             hospitals.add(hospital);
         }
 
         return hospitals;
     }
 
-    public static Hospital createSampleHospital(String name, String description, MyUser user) {
+    public static Hospital createSampleHospital(String name, String description, MyUser user, List<Specialization> specializations) {
         Hospital hospital = new Hospital();
 
         hospital.setHospitalName(name);
@@ -145,10 +171,13 @@ public class HospitalGenerator {
 
         hospital.setUser(user);
 
+        // Assign specializations to hospital
+        assignSpecializationsToHospital(hospital, specializations);
+
         return hospital;
     }
 
-    public static List<Hospital> generateHospitalsWithoutUsers(int count) {
+    public static List<Hospital> generateHospitalsWithoutUsers(int count, List<Specialization> specializations) {
         List<Hospital> hospitals = new ArrayList<>();
         Random random = new Random();
 
@@ -165,9 +194,31 @@ public class HospitalGenerator {
                     1000 + random.nextInt(9000));
             hospital.setHospitalPhone(phoneNumber);
 
+            // Assign specializations to hospital
+            assignSpecializationsToHospital(hospital, specializations);
+
             hospitals.add(hospital);
         }
 
         return hospitals;
+    }
+
+    // Backward compatibility methods (deprecated)
+    @Deprecated
+    public static List<Hospital> generateSampleHospitals(List<MyUser> users) {
+        System.out.println("Warning: Using deprecated method. Please provide specializations parameter.");
+        return generateSampleHospitals(users, new ArrayList<>());
+    }
+
+    @Deprecated
+    public static Hospital createSampleHospital(String name, String description, MyUser user) {
+        System.out.println("Warning: Using deprecated method. Please provide specializations parameter.");
+        return createSampleHospital(name, description, user, new ArrayList<>());
+    }
+
+    @Deprecated
+    public static List<Hospital> generateHospitalsWithoutUsers(int count) {
+        System.out.println("Warning: Using deprecated method. Please provide specializations parameter.");
+        return generateHospitalsWithoutUsers(count, new ArrayList<>());
     }
 }
