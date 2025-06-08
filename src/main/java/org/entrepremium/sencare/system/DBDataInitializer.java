@@ -9,8 +9,6 @@ import org.entrepremium.sencare.feature.workexperience.WorkExperience;
 import org.entrepremium.sencare.feature.workexperience.WorkExperienceService;
 import org.entrepremium.sencare.feature.hospital.Hospital;
 import org.entrepremium.sencare.feature.hospital.HospitalService;
-import org.entrepremium.sencare.feature.hospitalspec.HospitalSpec;
-import org.entrepremium.sencare.feature.hospitalspec.HospitalSpecService;
 import org.entrepremium.sencare.feature.specialization.Specialization;
 import org.entrepremium.sencare.feature.specialization.SpecializationService;
 import org.entrepremium.sencare.feature.myuser.MyUser;
@@ -31,12 +29,10 @@ public class DBDataInitializer implements CommandLineRunner {
     private final WorkExperienceService workExperienceService;
     private final HospitalService hospitalService;
     private final SpecializationService specializationService;
-    private final HospitalSpecService hospitalSpecService;
     private final UserService myUserService; // Assuming you have this service
 
     @Override
     public void run(String... args) throws Exception {
-
         // Step 1: Create and save users (if MyUserService is available)
         List<MyUser> users = new ArrayList<>();
         try {
@@ -45,7 +41,8 @@ public class DBDataInitializer implements CommandLineRunner {
             System.out.println("MyUser service not available, creating hospitals without user assignments");
         }
 
-        // Step 2: Create and save specializations
+        // Step 2: Create and save specializations FIRST
+        System.out.println("Creating specializations...");
         List<Specialization> sampleSpecializations = SpecializationGenerator.generateSampleSpecializations();
         List<Specialization> savedSpecializations = new ArrayList<>();
 
@@ -54,8 +51,9 @@ public class DBDataInitializer implements CommandLineRunner {
             savedSpecializations.add(savedSpecialization);
         }
 
-        // Step 3: Create and save hospitals
-        List<Hospital> sampleHospitals = HospitalGenerator.generateSampleHospitals(users);
+        // Step 3: Create and save hospitals with specializations
+        System.out.println("Creating hospitals with specializations...");
+        List<Hospital> sampleHospitals = HospitalGenerator.generateSampleHospitals(users, savedSpecializations);
         List<Hospital> savedHospitals = new ArrayList<>();
 
         for (Hospital hospital : sampleHospitals) {
@@ -63,13 +61,16 @@ public class DBDataInitializer implements CommandLineRunner {
             savedHospitals.add(savedHospital);
         }
 
-        // Step 4: Create and save hospital specializations
-        List<HospitalSpec> sampleHospitalSpecs = HospitalSpecGenerator.generateSampleHospitalSpecs(savedHospitals, savedSpecializations);
-        for (HospitalSpec hospitalSpec : sampleHospitalSpecs) {
-            hospitalSpecService.save(hospitalSpec);
+        // Step 4: Update specializations with hospital relationships (ensure bidirectional consistency)
+        System.out.println("Updating specialization-hospital relationships...");
+        for (Specialization specialization : savedSpecializations) {
+            // The relationship should already be set from the hospital side,
+            // but we save again to ensure persistence
+            specializationService.save(specialization);
         }
 
         // Step 5: Create and save doctors
+        System.out.println("Creating doctors...");
         List<Doctor> sampleDoctors = DoctorGenerator.generateSampleDoctors(savedHospitals);
         List<Doctor> savedDoctors = new ArrayList<>();
 
@@ -79,25 +80,35 @@ public class DBDataInitializer implements CommandLineRunner {
         }
 
         // Step 6: Create and save educations for each doctor
+        System.out.println("Creating education records...");
         List<Education> sampleEducations = EducationGenerator.generateSampleEducations(savedDoctors);
         for (Education education : sampleEducations) {
             educationService.save(education);
         }
 
         // Step 7: Create and save work experiences for each doctor
+        System.out.println("Creating work experience records...");
         List<WorkExperience> sampleWorkExperiences = WorkExperienceGenerator.generateSampleWorkExperiences(savedDoctors);
         for (WorkExperience workExperience : sampleWorkExperiences) {
             workExperienceService.save(workExperience);
         }
 
-        System.out.println("Database initialized with:");
+        // Step 8: Verify relationships
+        System.out.println("Verifying hospital-specialization relationships...");
+        for (Hospital hospital : savedHospitals) {
+            Hospital refreshedHospital = hospitalService.findById(hospital.getHospitalId());
+            System.out.println(hospital.getHospitalName() + " has " +
+                    refreshedHospital.getSpecializations().size() + " specializations");
+        }
+
+        System.out.println("\n=== Database Initialization Complete ===");
         System.out.println("- " + users.size() + " users");
         System.out.println("- " + savedSpecializations.size() + " specializations");
         System.out.println("- " + savedHospitals.size() + " hospitals");
-        System.out.println("- " + sampleHospitalSpecs.size() + " hospital specializations");
         System.out.println("- " + savedDoctors.size() + " doctors");
         System.out.println("- " + sampleEducations.size() + " education records");
         System.out.println("- " + sampleWorkExperiences.size() + " work experience records");
+        System.out.println("==========================================");
     }
 
     // Helper method to create sample users if needed
