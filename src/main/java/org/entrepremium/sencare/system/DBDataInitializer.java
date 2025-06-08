@@ -5,18 +5,18 @@ import org.entrepremium.sencare.feature.doctor.Doctor;
 import org.entrepremium.sencare.feature.doctor.DoctorService;
 import org.entrepremium.sencare.feature.education.Education;
 import org.entrepremium.sencare.feature.education.EducationService;
-import org.entrepremium.sencare.feature.hosserv.HosServ;
-import org.entrepremium.sencare.feature.hosserv.HosServService;
-import org.entrepremium.sencare.feature.review.Review;
-import org.entrepremium.sencare.feature.review.ReviewService;
-import org.entrepremium.sencare.feature.wex.WorkExperience;
-import org.entrepremium.sencare.feature.wex.WorkExperienceService;
 import org.entrepremium.sencare.feature.hospital.Hospital;
 import org.entrepremium.sencare.feature.hospital.HospitalService;
-import org.entrepremium.sencare.feature.spec.Specialization;
-import org.entrepremium.sencare.feature.spec.SpecializationService;
+import org.entrepremium.sencare.feature.hosserv.HosServ;
+import org.entrepremium.sencare.feature.hosserv.HosServService;
 import org.entrepremium.sencare.feature.myuser.MyUser;
 import org.entrepremium.sencare.feature.myuser.UserService;
+import org.entrepremium.sencare.feature.review.Review;
+import org.entrepremium.sencare.feature.review.ReviewService;
+import org.entrepremium.sencare.feature.spec.Specialization;
+import org.entrepremium.sencare.feature.spec.SpecializationService;
+import org.entrepremium.sencare.feature.wex.WorkExperience;
+import org.entrepremium.sencare.feature.wex.WorkExperienceService;
 import org.entrepremium.sencare.system.util.generator.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -43,7 +43,7 @@ public class DBDataInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        // Step 1: Create and save users (if MyUserService is available)
+        // Create and save users
         System.out.println("Creating users...");
         List<MyUser> savedUsers = new ArrayList<>();
         for (MyUser user : UserGenerator.generateSampleUsers(20)) {
@@ -51,7 +51,7 @@ public class DBDataInitializer implements CommandLineRunner {
             savedUsers.add(savedUser);
         }
 
-        // Step 2: Create and save specializations FIRST
+        // Create and save specializations
         System.out.println("Creating specializations...");
         List<Specialization> savedSpecializations = new ArrayList<>();
         for (Specialization specialization : SpecializationGenerator.generateSampleSpecializations()) {
@@ -59,7 +59,7 @@ public class DBDataInitializer implements CommandLineRunner {
             savedSpecializations.add(savedSpecialization);
         }
 
-        // Step 3: Create hospitals and associate them with SAVED specializations
+        // Create and save hospitals
         System.out.println("Creating hospitals...");
         List<Hospital> savedHospitals = new ArrayList<>();
         for (Hospital hospital : HospitalGenerator.generateSampleHospitals(savedUsers)) {
@@ -68,13 +68,15 @@ public class DBDataInitializer implements CommandLineRunner {
             savedHospitals.add(savedHospital);
         }
 
+        // Create and save hospital services
+        System.out.println("Creating hospital services...");
         for (Hospital hospital : savedHospitals) {
             for (HosServ hosServ : HosServGenerator.generateHospitalServices(hospital, random.nextInt(10) + 1)) {
                 hosServService.save(hosServ);
             }
         }
 
-        // Step 5: Create and save doctors
+        // Create and save doctors
         System.out.println("Creating doctors...");
         List<Doctor> savedDoctors = new ArrayList<>();
         for (Doctor doctor : DoctorGenerator.generateSampleDoctors(savedHospitals)) {
@@ -82,20 +84,21 @@ public class DBDataInitializer implements CommandLineRunner {
             savedDoctors.add(savedDoctor);
         }
 
-        // Step 6: Create and save educations for each doctor
+        // Create and save educations for each doctor
         System.out.println("Creating education records...");
         List<Education> sampleEducations = EducationGenerator.generateSampleEducations(savedDoctors);
         for (Education education : sampleEducations) {
             educationService.save(education);
         }
 
-        // Step 7: Create and save work experiences for each doctor
+        // Create and save work experiences for each doctor
         System.out.println("Creating work experience records...");
         List<WorkExperience> sampleWorkExperiences = WorkExperienceGenerator.generateSampleWorkExperiences(savedDoctors);
         for (WorkExperience workExperience : sampleWorkExperiences) {
             workExperienceService.save(workExperience);
         }
 
+        // Create and save reviews for each doctor
         List<Review> savedReviews = new ArrayList<>();
         for (Doctor doctor : savedDoctors) {
             for (Review review : ReviewGenerator.generateMultipleDoctorReviews(doctor, savedUsers, doctor.getHospital(), random.nextInt(5) + 1)) {
@@ -103,16 +106,6 @@ public class DBDataInitializer implements CommandLineRunner {
                 savedReviews.add(savedReview);
             }
         }
-
-        System.out.println("Database initialized with:");
-        System.out.println("- " + savedUsers.size() + " users");
-//        // Step 8: Verify relationships
-//        System.out.println("Verifying hospital-specialization relationships...");
-//        for (Hospital hospital : savedHospitals) {
-//            Hospital refreshedHospital = hospitalService.findById(hospital.getHospitalId());
-//            System.out.println(hospital.getHospitalName() + " has " +
-//                    refreshedHospital.getSpecializations().size() + " specializations");
-//        }
 
         System.out.println("\n=== Database Initialization Complete ===");
         System.out.println("- " + savedUsers.size() + " users");

@@ -1,7 +1,7 @@
 package org.entrepremium.sencare.system.util.generator;
 
-import org.entrepremium.sencare.feature.hosserv.HosServ;
 import org.entrepremium.sencare.feature.hospital.Hospital;
+import org.entrepremium.sencare.feature.hosserv.HosServ;
 
 import java.util.ArrayList;
 import java.util.Arrays;

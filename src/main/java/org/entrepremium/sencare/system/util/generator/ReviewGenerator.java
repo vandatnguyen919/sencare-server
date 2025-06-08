@@ -1,14 +1,14 @@
 package org.entrepremium.sencare.system.util.generator;
 
-import org.entrepremium.sencare.feature.review.Review;
 import org.entrepremium.sencare.feature.doctor.Doctor;
 import org.entrepremium.sencare.feature.hospital.Hospital;
 import org.entrepremium.sencare.feature.hosserv.HosServ;
 import org.entrepremium.sencare.feature.myuser.MyUser;
+import org.entrepremium.sencare.feature.review.Review;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.Arrays;
 
 public class ReviewGenerator {
 

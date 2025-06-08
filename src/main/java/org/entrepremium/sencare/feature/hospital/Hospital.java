@@ -44,7 +44,6 @@ public class Hospital {
     }
 
     public void addAllSpecs(List<Specialization> specializations) {
-        specializations.forEach(spec -> spec.addHospital(this));
         this.specializations.addAll(specializations);
     }
 

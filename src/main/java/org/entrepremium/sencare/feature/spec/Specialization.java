@@ -21,9 +21,4 @@ public class Specialization {
 
     @ManyToMany(mappedBy = "specializations", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Hospital> hospitals = new ArrayList<>();
-
-    public void addHospital(Hospital hospital) {
-        this.hospitals.add(hospital);
-        hospital.getSpecializations().add(this);
-    }
 }
