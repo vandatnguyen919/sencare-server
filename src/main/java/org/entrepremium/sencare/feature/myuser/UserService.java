@@ -36,6 +36,7 @@ public class UserService implements UserDetailsService {
     public MyUser update(String userId, MyUser user) {
         return userRepository.findById(userId)
                 .map(oldUser -> {
+                    oldUser.setFullName(user.getFullName());
                     oldUser.setEnabled(user.isEnabled());
                     oldUser.setRoles(user.getRoles());
                     return userRepository.save(oldUser);
