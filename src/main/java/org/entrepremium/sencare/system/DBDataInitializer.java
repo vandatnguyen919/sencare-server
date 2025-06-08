@@ -5,6 +5,8 @@ import org.entrepremium.sencare.feature.doctor.Doctor;
 import org.entrepremium.sencare.feature.doctor.DoctorService;
 import org.entrepremium.sencare.feature.education.Education;
 import org.entrepremium.sencare.feature.education.EducationService;
+import org.entrepremium.sencare.feature.hosserv.HosServ;
+import org.entrepremium.sencare.feature.hosserv.HosServService;
 import org.entrepremium.sencare.feature.review.Review;
 import org.entrepremium.sencare.feature.review.ReviewService;
 import org.entrepremium.sencare.feature.workexperience.WorkExperience;
@@ -34,6 +36,7 @@ public class DBDataInitializer implements CommandLineRunner {
     private final ReviewService reviewService;
     private final WorkExperienceService workExperienceService;
     private final HospitalService hospitalService;
+    private final HosServService hosServService;
     private final SpecializationService specializationService;
     private final HospitalSpecService hospitalSpecService;
     private final UserService userService;
@@ -67,6 +70,13 @@ public class DBDataInitializer implements CommandLineRunner {
         // Step 4: Create and save hospital specializations
         for (HospitalSpec hospitalSpec : HospitalSpecGenerator.generateSampleHospitalSpecs(savedHospitals, savedSpecializations)) {
             hospitalSpecService.save(hospitalSpec);
+        }
+
+
+        for (Hospital hospital : savedHospitals) {
+            for (HosServ hosServ : HosServGenerator.generateHospitalServices(hospital, random.nextInt(10) + 1)) {
+                hosServService.save(hosServ);
+            }
         }
 
         // Step 5: Create and save doctors

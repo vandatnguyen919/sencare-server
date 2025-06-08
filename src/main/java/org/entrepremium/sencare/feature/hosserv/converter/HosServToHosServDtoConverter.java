@@ -5,6 +5,8 @@ import org.entrepremium.sencare.feature.hosserv.dto.HosServDto;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 @Component
 public class HosServToHosServDtoConverter implements Converter<HosServ, HosServDto> {
 
@@ -14,7 +16,7 @@ public class HosServToHosServDtoConverter implements Converter<HosServ, HosServD
                 source.getId(),
                 source.getServName(),
                 source.getServDesc(),
-                source.getServPrice(),
+                BigDecimal.valueOf(source.getServPrice()),
                 source.getServImage(),
                 source.isAvailable(),
                 source.getCreatedAt(),

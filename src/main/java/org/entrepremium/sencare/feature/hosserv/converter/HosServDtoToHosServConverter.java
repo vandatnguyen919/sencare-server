@@ -13,7 +13,7 @@ public class HosServDtoToHosServConverter implements Converter<HosServDto, HosSe
         HosServ hosServ = new HosServ();
         hosServ.setServName(source.servName());
         hosServ.setServDesc(source.servDesc());
-        hosServ.setServPrice(source.servPrice());
+        hosServ.setServPrice(source.servPrice().doubleValue());
         hosServ.setServImage(source.servImage());
         hosServ.setAvailable(source.available());
         return hosServ;
