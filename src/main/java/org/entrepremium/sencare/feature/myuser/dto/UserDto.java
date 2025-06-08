@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public record UserDto(
         String id,
         String email,
+        String fullName,
         boolean enabled,
         String roles,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

@@ -5,6 +5,10 @@ import org.entrepremium.sencare.feature.doctor.Doctor;
 import org.entrepremium.sencare.feature.doctor.DoctorService;
 import org.entrepremium.sencare.feature.education.Education;
 import org.entrepremium.sencare.feature.education.EducationService;
+import org.entrepremium.sencare.feature.hosserv.HosServ;
+import org.entrepremium.sencare.feature.hosserv.HosServService;
+import org.entrepremium.sencare.feature.review.Review;
+import org.entrepremium.sencare.feature.review.ReviewService;
 import org.entrepremium.sencare.feature.workexperience.WorkExperience;
 import org.entrepremium.sencare.feature.workexperience.WorkExperienceService;
 import org.entrepremium.sencare.feature.hospital.Hospital;
@@ -21,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
@@ -28,52 +33,55 @@ public class DBDataInitializer implements CommandLineRunner {
 
     private final DoctorService doctorService;
     private final EducationService educationService;
+    private final ReviewService reviewService;
     private final WorkExperienceService workExperienceService;
     private final HospitalService hospitalService;
+    private final HosServService hosServService;
     private final SpecializationService specializationService;
     private final HospitalSpecService hospitalSpecService;
-    private final UserService myUserService; // Assuming you have this service
+    private final UserService userService;
+
+    private final Random random = new Random();
 
     @Override
     public void run(String... args) throws Exception {
 
         // Step 1: Create and save users (if MyUserService is available)
-        List<MyUser> users = new ArrayList<>();
-        try {
-            users = createSampleUsers(); // Create sample users for hospital owners
-        } catch (Exception e) {
-            System.out.println("MyUser service not available, creating hospitals without user assignments");
+        List<MyUser> savedUsers = new ArrayList<>();
+        for (MyUser user : UserGenerator.generateSampleUsers(20)) {
+            MyUser savedUser = userService.save(user);
+            savedUsers.add(savedUser);
         }
 
         // Step 2: Create and save specializations
-        List<Specialization> sampleSpecializations = SpecializationGenerator.generateSampleSpecializations();
         List<Specialization> savedSpecializations = new ArrayList<>();
-
-        for (Specialization specialization : sampleSpecializations) {
+        for (Specialization specialization : SpecializationGenerator.generateSampleSpecializations()) {
             Specialization savedSpecialization = specializationService.save(specialization);
             savedSpecializations.add(savedSpecialization);
         }
 
         // Step 3: Create and save hospitals
-        List<Hospital> sampleHospitals = HospitalGenerator.generateSampleHospitals(users);
         List<Hospital> savedHospitals = new ArrayList<>();
-
-        for (Hospital hospital : sampleHospitals) {
+        for (Hospital hospital : HospitalGenerator.generateSampleHospitals(savedUsers)) {
             Hospital savedHospital = hospitalService.save(hospital);
             savedHospitals.add(savedHospital);
         }
 
         // Step 4: Create and save hospital specializations
-        List<HospitalSpec> sampleHospitalSpecs = HospitalSpecGenerator.generateSampleHospitalSpecs(savedHospitals, savedSpecializations);
-        for (HospitalSpec hospitalSpec : sampleHospitalSpecs) {
+        for (HospitalSpec hospitalSpec : HospitalSpecGenerator.generateSampleHospitalSpecs(savedHospitals, savedSpecializations)) {
             hospitalSpecService.save(hospitalSpec);
         }
 
-        // Step 5: Create and save doctors
-        List<Doctor> sampleDoctors = DoctorGenerator.generateSampleDoctors(savedHospitals);
-        List<Doctor> savedDoctors = new ArrayList<>();
 
-        for (Doctor doctor : sampleDoctors) {
+        for (Hospital hospital : savedHospitals) {
+            for (HosServ hosServ : HosServGenerator.generateHospitalServices(hospital, random.nextInt(10) + 1)) {
+                hosServService.save(hosServ);
+            }
+        }
+
+        // Step 5: Create and save doctors
+        List<Doctor> savedDoctors = new ArrayList<>();
+        for (Doctor doctor : DoctorGenerator.generateSampleDoctors(savedHospitals)) {
             Doctor savedDoctor = doctorService.save(doctor);
             savedDoctors.add(savedDoctor);
         }
@@ -90,39 +98,21 @@ public class DBDataInitializer implements CommandLineRunner {
             workExperienceService.save(workExperience);
         }
 
-        System.out.println("Database initialized with:");
-        System.out.println("- " + users.size() + " users");
-        System.out.println("- " + savedSpecializations.size() + " specializations");
-        System.out.println("- " + savedHospitals.size() + " hospitals");
-        System.out.println("- " + sampleHospitalSpecs.size() + " hospital specializations");
-        System.out.println("- " + savedDoctors.size() + " doctors");
-        System.out.println("- " + sampleEducations.size() + " education records");
-        System.out.println("- " + sampleWorkExperiences.size() + " work experience records");
-    }
-
-    // Helper method to create sample users if needed
-    private List<MyUser> createSampleUsers() {
-        List<MyUser> users = new ArrayList<>();
-
-        // Create sample users to be hospital owners/administrators
-        String[] userNames = {"John Admin", "Sarah Manager", "Mike Director", "Lisa Owner", "David CEO"};
-        String[] userEmails = {"john@hospital.com", "sarah@medical.com", "mike@healthcare.com", "lisa@clinic.com", "david@medcenter.com"};
-
-        for (int i = 0; i < userNames.length; i++) {
-            try {
-                MyUser user = new MyUser(); // Assuming MyUser has a default constructor
-                // Set user properties (adjust these based on your MyUser entity structure)
-                // user.setName(userNames[i]);
-                // user.setEmail(userEmails[i]);
-                // user.setRole("HOSPITAL_ADMIN");
-                // Set other required fields
-                MyUser savedUser = myUserService.save(user);
-                users.add(savedUser);
-            } catch (Exception e) {
-                System.out.println("Could not create user: " + userNames[i]);
+        List<Review> savedReviews = new ArrayList<>();
+        for (Doctor doctor : savedDoctors) {
+            for (Review review : ReviewGenerator.generateMultipleDoctorReviews(doctor, savedUsers, doctor.getHospital(), random.nextInt(5) + 1)) {
+                Review savedReview = reviewService.save(review);
+                savedReviews.add(savedReview);
             }
         }
 
-        return users;
+        System.out.println("Database initialized with:");
+        System.out.println("- " + savedUsers.size() + " users");
+        System.out.println("- " + savedSpecializations.size() + " specializations");
+        System.out.println("- " + savedHospitals.size() + " hospitals");
+        System.out.println("- " + savedDoctors.size() + " doctors");
+        System.out.println("- " + sampleEducations.size() + " education records");
+        System.out.println("- " + savedReviews.size() + " reviews");
+        System.out.println("- " + sampleWorkExperiences.size() + " work experience records");
     }
 }

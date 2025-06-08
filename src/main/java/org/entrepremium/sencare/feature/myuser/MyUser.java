@@ -25,6 +25,8 @@ public class MyUser {
 
     private String password;
 
+    private String fullName;
+
     private boolean enabled;
 
     private String roles;
