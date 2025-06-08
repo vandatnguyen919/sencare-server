@@ -3,7 +3,7 @@ package org.entrepremium.sencare.feature.doctor.converter;
 import org.entrepremium.sencare.feature.doctor.Doctor;
 import org.entrepremium.sencare.feature.doctor.dto.DoctorDto;
 import org.entrepremium.sencare.feature.education.converter.EducationToDtoConverter;
-import org.entrepremium.sencare.feature.workexperience.converter.WorkExperienceToDtoConverter;
+import org.entrepremium.sencare.feature.wex.converter.WorkExperienceToDtoConverter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

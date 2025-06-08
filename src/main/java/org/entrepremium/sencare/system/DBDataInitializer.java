@@ -9,15 +9,15 @@ import org.entrepremium.sencare.feature.hosserv.HosServ;
 import org.entrepremium.sencare.feature.hosserv.HosServService;
 import org.entrepremium.sencare.feature.review.Review;
 import org.entrepremium.sencare.feature.review.ReviewService;
-import org.entrepremium.sencare.feature.workexperience.WorkExperience;
-import org.entrepremium.sencare.feature.workexperience.WorkExperienceService;
+import org.entrepremium.sencare.feature.wex.WorkExperience;
+import org.entrepremium.sencare.feature.wex.WorkExperienceService;
 import org.entrepremium.sencare.feature.hospital.Hospital;
 import org.entrepremium.sencare.feature.hospital.HospitalService;
-import org.entrepremium.sencare.feature.specialization.Specialization;
-import org.entrepremium.sencare.feature.specialization.SpecializationService;
+import org.entrepremium.sencare.feature.spec.Specialization;
+import org.entrepremium.sencare.feature.spec.SpecializationService;
 import org.entrepremium.sencare.feature.myuser.MyUser;
 import org.entrepremium.sencare.feature.myuser.UserService;
-import org.entrepremium.sencare.system.utils.generators.*;
+import org.entrepremium.sencare.system.util.generator.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -44,6 +44,7 @@ public class DBDataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         // Step 1: Create and save users (if MyUserService is available)
+        System.out.println("Creating users...");
         List<MyUser> savedUsers = new ArrayList<>();
         for (MyUser user : UserGenerator.generateSampleUsers(20)) {
             MyUser savedUser = userService.save(user);
@@ -58,22 +59,14 @@ public class DBDataInitializer implements CommandLineRunner {
             savedSpecializations.add(savedSpecialization);
         }
 
-        // Step 3: Create and save hospitals with specializations
-        System.out.println("Creating hospitals with specializations...");
+        // Step 3: Create hospitals and associate them with SAVED specializations
+        System.out.println("Creating hospitals...");
         List<Hospital> savedHospitals = new ArrayList<>();
-        for (Hospital hospital : HospitalGenerator.generateSampleHospitals(savedUsers, savedSpecializations)) {
+        for (Hospital hospital : HospitalGenerator.generateSampleHospitals(savedUsers)) {
+            hospital.addAllSpecs(getRandomSublist(savedSpecializations, 2, 6));
             Hospital savedHospital = hospitalService.save(hospital);
             savedHospitals.add(savedHospital);
         }
-
-        // Step 4: Update specializations with hospital relationships (ensure bidirectional consistency)
-        System.out.println("Updating specialization-hospital relationships...");
-        for (Specialization specialization : savedSpecializations) {
-            // The relationship should already be set from the hospital side,
-            // but we save again to ensure persistence
-            specializationService.save(specialization);
-        }
-
 
         for (Hospital hospital : savedHospitals) {
             for (HosServ hosServ : HosServGenerator.generateHospitalServices(hospital, random.nextInt(10) + 1)) {
@@ -113,13 +106,13 @@ public class DBDataInitializer implements CommandLineRunner {
 
         System.out.println("Database initialized with:");
         System.out.println("- " + savedUsers.size() + " users");
-        // Step 8: Verify relationships
-        System.out.println("Verifying hospital-specialization relationships...");
-        for (Hospital hospital : savedHospitals) {
-            Hospital refreshedHospital = hospitalService.findById(hospital.getHospitalId());
-            System.out.println(hospital.getHospitalName() + " has " +
-                    refreshedHospital.getSpecializations().size() + " specializations");
-        }
+//        // Step 8: Verify relationships
+//        System.out.println("Verifying hospital-specialization relationships...");
+//        for (Hospital hospital : savedHospitals) {
+//            Hospital refreshedHospital = hospitalService.findById(hospital.getHospitalId());
+//            System.out.println(hospital.getHospitalName() + " has " +
+//                    refreshedHospital.getSpecializations().size() + " specializations");
+//        }
 
         System.out.println("\n=== Database Initialization Complete ===");
         System.out.println("- " + savedUsers.size() + " users");
@@ -129,5 +122,35 @@ public class DBDataInitializer implements CommandLineRunner {
         System.out.println("- " + sampleEducations.size() + " education records");
         System.out.println("- " + savedReviews.size() + " reviews");
         System.out.println("- " + sampleWorkExperiences.size() + " work experience records");
+    }
+
+    /**
+     * Helper method to get a random sublist from a list
+     * @param list The source list
+     * @param min Minimum number of elements
+     * @param max Maximum number of elements
+     * @return A random sublist with size between min and max
+     */
+    private <T> List<T> getRandomSublist(List<T> list, int min, int max) {
+        int size = list.size();
+        int sublistSize = random.nextInt(max - min + 1) + min;
+        sublistSize = Math.min(sublistSize, size); // Ensure we don't exceed list size
+
+        List<T> result = new ArrayList<>();
+        List<Integer> indices = new ArrayList<>();
+
+        // Create list of indices
+        for (int i = 0; i < size; i++) {
+            indices.add(i);
+        }
+
+        // Randomly select elements
+        for (int i = 0; i < sublistSize; i++) {
+            int randomIndex = random.nextInt(indices.size());
+            int selectedIndex = indices.remove(randomIndex);
+            result.add(list.get(selectedIndex));
+        }
+
+        return result;
     }
 }

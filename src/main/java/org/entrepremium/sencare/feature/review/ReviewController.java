@@ -7,7 +7,7 @@ import org.entrepremium.sencare.feature.review.converter.ReviewToReviewDtoConver
 import org.entrepremium.sencare.feature.review.dto.ReviewDto;
 import org.entrepremium.sencare.system.Result;
 import org.entrepremium.sencare.system.StatusCode;
-import org.entrepremium.sencare.system.utils.JwtUtils;
+import org.entrepremium.sencare.system.util.JwtUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;

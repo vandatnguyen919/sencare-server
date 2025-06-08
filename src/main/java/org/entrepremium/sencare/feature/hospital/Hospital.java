@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.entrepremium.sencare.feature.doctor.Doctor;
 import org.entrepremium.sencare.feature.myuser.MyUser;
-import org.entrepremium.sencare.feature.specialization.Specialization;
+import org.entrepremium.sencare.feature.spec.Specialization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,26 @@ public class Hospital {
     @OneToMany(mappedBy = "hospital", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Doctor> doctors = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "hospitals", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany
+    @JoinTable(
+            name = "hospital_spec",
+            joinColumns = @JoinColumn(name = "hospital_id"),
+            inverseJoinColumns = @JoinColumn(name = "spec_id")
+    )
     private List<Specialization> specializations = new ArrayList<>();
+
+    public void addSpec(Specialization specialization) {
+        this.specializations.add(specialization);
+        specialization.getHospitals().add(this);
+    }
+
+    public void addAllSpecs(List<Specialization> specializations) {
+        specializations.forEach(spec -> spec.addHospital(this));
+        this.specializations.addAll(specializations);
+    }
+
+    public void removeSpec(Specialization specialization) {
+        this.specializations.remove(specialization);
+        specialization.getHospitals().remove(this);
+    }
 }
