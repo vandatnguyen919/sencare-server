@@ -120,7 +120,7 @@ public class HosServGenerator {
             hosServ.setServName(serviceData.getName());
             hosServ.setServDesc(serviceData.getDescription());
             hosServ.setServPrice(generateRandomPrice(serviceData.getMinPrice(), serviceData.getMaxPrice()));
-            hosServ.setServImage(serviceData.getImageName());
+            hosServ.setServImage("https://cdn-healthcare.hellohealthgroup.com/services/Specialty.png");
             hosServ.setAvailable(generateAvailabilityStatus());
             
             services.add(hosServ);
