@@ -1,7 +1,7 @@
 package org.entrepremium.sencare.feature.doctor.dto;
 
 import org.entrepremium.sencare.feature.education.dto.EducationDto;
-import org.entrepremium.sencare.feature.workexperience.dto.WorkExperienceDto;
+import org.entrepremium.sencare.feature.wex.dto.WorkExperienceDto;
 
 import java.math.BigDecimal;
 import java.util.List;

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.entrepremium.sencare.feature.education.Education;
 import org.entrepremium.sencare.feature.hospital.Hospital;
-import org.entrepremium.sencare.feature.workexperience.WorkExperience;
+import org.entrepremium.sencare.feature.wex.WorkExperience;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
