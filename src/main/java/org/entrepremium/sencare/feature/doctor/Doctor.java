@@ -3,8 +3,11 @@ package org.entrepremium.sencare.feature.doctor;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.entrepremium.sencare.feature.appointment.Appointment;
 import org.entrepremium.sencare.feature.education.Education;
 import org.entrepremium.sencare.feature.hospital.Hospital;
+import org.entrepremium.sencare.feature.review.Review;
+import org.entrepremium.sencare.feature.timeslot.Timeslot;
 import org.entrepremium.sencare.feature.workexperience.WorkExperience;
 
 import java.math.BigDecimal;
@@ -33,4 +36,13 @@ public class Doctor {
 
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<WorkExperience> workExperiences = new ArrayList<>();
+
+    @OneToMany(mappedBy = "doctor", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Timeslot> timeslots = new ArrayList<>();
+
+    @OneToMany(mappedBy = "doctor", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Appointment> appointments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "doctor", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Review> reviews = new ArrayList<>();
 }

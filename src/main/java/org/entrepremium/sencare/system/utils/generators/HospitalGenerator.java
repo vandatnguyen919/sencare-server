@@ -118,7 +118,7 @@ public class HospitalGenerator {
         for (int i = 0; i < Math.min(numSpecializations, shuffledSpecs.size()); i++) {
             Specialization spec = shuffledSpecs.get(i);
             hospital.getSpecializations().add(spec);
-            spec.getHospital().add(hospital);
+            spec.getHospitals().add(hospital);
         }
     }
 

@@ -1,5 +1,6 @@
 package org.entrepremium.sencare.feature.specialization;
 
+import lombok.RequiredArgsConstructor;
 import org.entrepremium.sencare.feature.specialization.converter.SpecializationToDtoConverter;
 import org.entrepremium.sencare.feature.specialization.dto.SpecializationDto;
 import org.entrepremium.sencare.system.Result;
@@ -13,15 +14,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("${api.endpoint.base-url}/specializations")
+@RequiredArgsConstructor
 public class SpecializationController {
     private final SpecializationService specializationService;
     private final SpecializationToDtoConverter specializationToDtoConverter;
-
-    public SpecializationController(SpecializationService specializationService,
-                                    SpecializationToDtoConverter specializationToDtoConverter) {
-        this.specializationService = specializationService;
-        this.specializationToDtoConverter = specializationToDtoConverter;
-    }
 
     @GetMapping
     public Result findAllSpecializations(Pageable pageable) {

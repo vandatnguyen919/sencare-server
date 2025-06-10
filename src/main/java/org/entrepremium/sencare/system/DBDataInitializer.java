@@ -1,10 +1,14 @@
 package org.entrepremium.sencare.system;
 
 import lombok.RequiredArgsConstructor;
+import org.entrepremium.sencare.feature.appointment.Appointment;
+import org.entrepremium.sencare.feature.appointment.AppointmentService;
 import org.entrepremium.sencare.feature.doctor.Doctor;
 import org.entrepremium.sencare.feature.doctor.DoctorService;
 import org.entrepremium.sencare.feature.education.Education;
 import org.entrepremium.sencare.feature.education.EducationService;
+import org.entrepremium.sencare.feature.timeslot.Timeslot;
+import org.entrepremium.sencare.feature.timeslot.TimeslotService;
 import org.entrepremium.sencare.feature.workexperience.WorkExperience;
 import org.entrepremium.sencare.feature.workexperience.WorkExperienceService;
 import org.entrepremium.sencare.feature.hospital.Hospital;
@@ -19,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -29,6 +34,8 @@ public class DBDataInitializer implements CommandLineRunner {
     private final WorkExperienceService workExperienceService;
     private final HospitalService hospitalService;
     private final SpecializationService specializationService;
+    private final AppointmentService appointmentService;
+    private final TimeslotService timeslotService;
     private final UserService myUserService; // Assuming you have this service
 
     @Override
@@ -93,14 +100,26 @@ public class DBDataInitializer implements CommandLineRunner {
             workExperienceService.save(workExperience);
         }
 
-        // Step 8: Verify relationships
-        System.out.println("Verifying hospital-specialization relationships...");
-        for (Hospital hospital : savedHospitals) {
-            Hospital refreshedHospital = hospitalService.findById(hospital.getHospitalId());
-            System.out.println(hospital.getHospitalName() + " has " +
-                    refreshedHospital.getSpecializations().size() + " specializations");
+        // Step 8: Create and save timeslots for each doctor
+        System.out.println("Creating timeslots...");
+        List<Timeslot> sampleTimeslots = TimeslotGenerator.generateSampleTimeslots(savedDoctors, savedHospitals.stream()
+                .flatMap(h -> h.getHosServs().stream())
+                .collect(Collectors.toList()));
+        List<Timeslot> savedTimeslots = new ArrayList<>();
+        for (Timeslot timeslot : sampleTimeslots) {
+            Timeslot savedTimeslot = timeslotService.save(timeslot);
+            savedTimeslots.add(savedTimeslot);
         }
 
+       // Step 9: Create and save appointments
+        System.out.println("Creating appointments...");
+        List<Appointment> sampleAppointments = AppointmentGenerator.generateSampleAppointments(
+                savedDoctors, users, savedTimeslots);
+        for (Appointment appointment : sampleAppointments) {
+            appointmentService.save(appointment);
+        }
+
+        // Update the final summary
         System.out.println("\n=== Database Initialization Complete ===");
         System.out.println("- " + users.size() + " users");
         System.out.println("- " + savedSpecializations.size() + " specializations");
@@ -108,6 +127,8 @@ public class DBDataInitializer implements CommandLineRunner {
         System.out.println("- " + savedDoctors.size() + " doctors");
         System.out.println("- " + sampleEducations.size() + " education records");
         System.out.println("- " + sampleWorkExperiences.size() + " work experience records");
+        System.out.println("- " + savedTimeslots.size() + " timeslots");
+        System.out.println("- " + sampleAppointments.size() + " appointments");
         System.out.println("==========================================");
     }
 

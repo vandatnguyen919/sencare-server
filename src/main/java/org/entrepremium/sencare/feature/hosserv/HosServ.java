@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.entrepremium.sencare.feature.hospital.Hospital;
 import org.entrepremium.sencare.feature.review.Review;
+import org.entrepremium.sencare.feature.timeslot.Timeslot;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -42,4 +43,7 @@ public class HosServ {
 
     @OneToMany(mappedBy = "hosServ", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "hosServ", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Timeslot> timeslots = new ArrayList<>();
 }

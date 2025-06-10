@@ -2,6 +2,7 @@ package org.entrepremium.sencare.feature.myuser;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.entrepremium.sencare.feature.appointment.Appointment;
 import org.entrepremium.sencare.feature.hospital.Hospital;
 import org.entrepremium.sencare.feature.review.Review;
 import org.hibernate.annotations.CreationTimestamp;
@@ -40,4 +41,8 @@ public class MyUser {
 
     @OneToMany(mappedBy = "createdBy", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Review> reviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Appointment> appointments = new ArrayList<>();
+
 }

@@ -1,5 +1,6 @@
 package org.entrepremium.sencare.feature.doctor;
 
+import lombok.RequiredArgsConstructor;
 import org.entrepremium.sencare.feature.doctor.converter.DoctorToDtoConverter;
 import org.entrepremium.sencare.feature.doctor.dto.DoctorDto;
 import org.entrepremium.sencare.system.Result;
@@ -14,15 +15,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("${api.endpoint.base-url}/doctors")
+@RequiredArgsConstructor
 public class DoctorController {
     private final DoctorService doctorService;
     private final DoctorToDtoConverter doctorToDoctorDtoConverter;
-
-    public DoctorController(DoctorService doctorService,
-                            DoctorToDtoConverter doctorToDtoConverter) {
-        this.doctorService = doctorService;
-        this.doctorToDoctorDtoConverter = doctorToDtoConverter;
-    }
 
     @GetMapping
     public Result findAllDoctors(Pageable pageable) {

@@ -1,5 +1,6 @@
 package org.entrepremium.sencare.feature.hospital;
 
+import lombok.RequiredArgsConstructor;
 import org.entrepremium.sencare.feature.hospital.converter.HospitalToDtoConverter;
 import org.entrepremium.sencare.feature.hospital.dto.HospitalDto;
 import org.entrepremium.sencare.system.Result;
@@ -13,15 +14,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("${api.endpoint.base-url}/hospitals")
+@RequiredArgsConstructor
 public class HospitalController {
     private final HospitalService hospitalService;
     private final HospitalToDtoConverter hospitalToDtoConverter;
-
-    public HospitalController(HospitalService hospitalService,
-                              HospitalToDtoConverter hospitalToDtoConverter) {
-        this.hospitalService = hospitalService;
-        this.hospitalToDtoConverter = hospitalToDtoConverter;
-    }
 
     @GetMapping
     public Result findAllHospitals(Pageable pageable) {

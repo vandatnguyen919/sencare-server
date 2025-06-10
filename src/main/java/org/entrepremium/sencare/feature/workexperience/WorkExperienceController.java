@@ -1,4 +1,5 @@
 package org.entrepremium.sencare.feature.workexperience;
+import lombok.RequiredArgsConstructor;
 import org.entrepremium.sencare.feature.workexperience.converter.WorkExperienceToDtoConverter;
 import org.entrepremium.sencare.feature.workexperience.dto.WorkExperienceDto;
 import org.entrepremium.sencare.system.Result;
@@ -14,16 +15,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("${api.endpoint.base-url}/work-experiences")
+@RequiredArgsConstructor
 public class WorkExperienceController {
 
     private final WorkExperienceService workExperienceService;
     private final WorkExperienceToDtoConverter workExperienceToWorkExperienceDtoConverter;
-
-    public WorkExperienceController(WorkExperienceService workExperienceService,
-                                    WorkExperienceToDtoConverter workExperienceToDtoConverter) {
-        this.workExperienceService = workExperienceService;
-        this.workExperienceToWorkExperienceDtoConverter = workExperienceToDtoConverter;
-    }
 
     @GetMapping
     public Result findAllWorkExperiences(Pageable pageable) {

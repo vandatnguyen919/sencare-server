@@ -1,5 +1,6 @@
 package org.entrepremium.sencare.feature.education;
 
+import lombok.RequiredArgsConstructor;
 import org.entrepremium.sencare.feature.education.converter.EducationToDtoConverter;
 import org.entrepremium.sencare.feature.education.dto.EducationDto;
 import org.entrepremium.sencare.system.Result;
@@ -13,16 +14,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("${api.endpoint.base-url}/educations")
+@RequiredArgsConstructor
 public class EducationController {
 
     private final EducationService educationService;
     private final EducationToDtoConverter educationToDtoConverter;
-
-    public EducationController(EducationService educationService,
-                               EducationToDtoConverter educationToDtoConverter) {
-        this.educationService = educationService;
-        this.educationToDtoConverter = educationToDtoConverter;
-    }
 
     @GetMapping
     public Result findAllEducations(Pageable pageable) {
