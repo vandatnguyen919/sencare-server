@@ -31,9 +31,14 @@ public class Hospital {
     @OneToMany(mappedBy = "hospital", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Doctor> doctors = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "hospitals", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "hospital_specialization",
+            joinColumns = @JoinColumn(name = "hospital_id"),
+            inverseJoinColumns = @JoinColumn(name = "spec_id")
+    )
     private List<Specialization> specializations = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "hospital", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<HosServ> hosServs = new ArrayList<>();
 }

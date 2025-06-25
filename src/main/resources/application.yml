@@ -1,11 +1,16 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:sencare
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/sencare_db
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:sa12345}
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
   docker:
     compose:
       enabled: false

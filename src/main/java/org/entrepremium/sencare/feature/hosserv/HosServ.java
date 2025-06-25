@@ -42,8 +42,7 @@ public class HosServ {
     private Hospital hospital;
 
     @OneToMany(mappedBy = "hosServ", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    private List<Review> reviews = new ArrayList<>();
+    private List<Timeslot> timeslots = new ArrayList<>();
 
     @OneToMany(mappedBy = "hosServ", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    private List<Timeslot> timeslots = new ArrayList<>();
-}
+    private List<Review> reviews = new ArrayList<>();}
