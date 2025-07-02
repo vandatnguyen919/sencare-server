@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/sencare_db
+    url: jdbc:mysql://localhost:3306/sencare_server
     username: ${DB_USERNAME:root}
     password: ${DB_PASSWORD:sa12345}
   jpa:
