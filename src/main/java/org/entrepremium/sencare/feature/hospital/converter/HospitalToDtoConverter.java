@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.entrepremium.sencare.feature.doctor.converter.DoctorToDtoConverter;
 import org.entrepremium.sencare.feature.hospital.Hospital;
 import org.entrepremium.sencare.feature.hospital.dto.HospitalDto;
+import org.entrepremium.sencare.feature.hosserv.HosServ;
+import org.entrepremium.sencare.feature.hosserv.converter.HosServToHosServDtoConverter;
+import org.entrepremium.sencare.feature.spec.Specialization;
 import org.entrepremium.sencare.feature.spec.converter.SpecializationToDtoConverter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -15,6 +18,8 @@ import java.util.stream.Collectors;
 public class HospitalToDtoConverter implements Converter<Hospital, HospitalDto> {
 
     private final DoctorToDtoConverter doctorConverter;
+
+    private final HosServToHosServDtoConverter hosServConverter;
 
     private final SpecializationToDtoConverter specializationConverter;
 
@@ -30,8 +35,11 @@ public class HospitalToDtoConverter implements Converter<Hospital, HospitalDto> 
                 source.getDoctors().stream()
                         .map(doctorConverter::convert)
                         .collect(Collectors.toList()),
+                source.getHosServs().stream()
+                        .map(hosServConverter::convert)
+                        .collect(Collectors.toList()),
                 source.getSpecializations().stream()
-                        .map(specializationConverter::convert)
+                        .map(Specialization::getSpecName)
                         .collect(Collectors.toList()),
                 0
         );
