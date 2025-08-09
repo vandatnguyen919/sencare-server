@@ -19,6 +19,7 @@ import org.entrepremium.sencare.feature.wex.WorkExperience;
 import org.entrepremium.sencare.feature.wex.WorkExperienceService;
 import org.entrepremium.sencare.system.util.generator.*;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
+@Profile("dev")
 public class DBDataInitializer implements CommandLineRunner {
 
     private final DoctorService doctorService;
@@ -41,7 +43,7 @@ public class DBDataInitializer implements CommandLineRunner {
     private final Random random = new Random();
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
         // Create and save users
         System.out.println("Creating users...");
