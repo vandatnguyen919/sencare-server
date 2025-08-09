@@ -11,7 +11,6 @@ public record HosServDto(
         String id,
         String servName,
         String servDesc,
-        @JsonSerialize(using = VndCurrencySerializer.class)
         BigDecimal servPrice,
         String servImage,
         boolean available,
