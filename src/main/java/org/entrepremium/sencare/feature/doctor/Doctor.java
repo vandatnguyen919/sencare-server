@@ -20,8 +20,11 @@ public class Doctor {
     private String doctorId;
 
     private String doctorAvatar;
+
     private String doctorName;
+
     private String doctorDescription;
+
     private BigDecimal doctorPrice;
 
     @ManyToOne

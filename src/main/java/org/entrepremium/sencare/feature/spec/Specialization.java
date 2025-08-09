@@ -17,6 +17,7 @@ public class Specialization {
     private String specId;
 
     private String specName;
+
     private String specDescription;
 
     @ManyToMany(mappedBy = "specializations", cascade = {CascadeType.PERSIST, CascadeType.MERGE})

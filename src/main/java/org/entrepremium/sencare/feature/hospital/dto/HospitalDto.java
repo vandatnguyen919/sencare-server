@@ -1,7 +1,7 @@
 package org.entrepremium.sencare.feature.hospital.dto;
 
 import org.entrepremium.sencare.feature.doctor.dto.DoctorDto;
-import org.entrepremium.sencare.feature.spec.Specialization;
+import org.entrepremium.sencare.feature.spec.dto.SpecializationDto;
 
 import java.util.List;
 
@@ -13,5 +13,6 @@ public record HospitalDto(
         String hospitalPhone,
         String userId,
         List<DoctorDto> doctors,
-        List<Specialization> specializations
+        List<SpecializationDto> specializations,
+        double rating
 ) {}

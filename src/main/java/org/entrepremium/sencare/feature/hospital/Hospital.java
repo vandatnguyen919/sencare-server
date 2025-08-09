@@ -14,14 +14,22 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class Hospital {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String hospitalId;
 
     private String hospitalAvatar;
+
     private String hospitalName;
+
     private String hospitalDescription;
+
     private String hospitalPhone;
+
+    private String hospitalEmail;
+
+    private String hospitalAddress;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
