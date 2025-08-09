@@ -40,6 +40,8 @@ public class HospitalService {
                     existingHospital.setHospitalName(hospital.getHospitalName());
                     existingHospital.setHospitalDescription(hospital.getHospitalDescription());
                     existingHospital.setHospitalPhone(hospital.getHospitalPhone());
+                    existingHospital.setHospitalEmail(hospital.getHospitalEmail());
+                    existingHospital.setHospitalAddress(hospital.getHospitalAddress());
                     existingHospital.setUser(hospital.getUser());
                     return hospitalRepository.save(existingHospital);
                 })
