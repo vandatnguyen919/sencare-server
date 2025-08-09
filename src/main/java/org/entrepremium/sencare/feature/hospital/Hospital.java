@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.entrepremium.sencare.feature.doctor.Doctor;
+import org.entrepremium.sencare.feature.hosserv.HosServ;
 import org.entrepremium.sencare.feature.myuser.MyUser;
 import org.entrepremium.sencare.feature.spec.Specialization;
 
@@ -23,6 +24,7 @@ public class Hospital {
 
     private String hospitalName;
 
+    @Column(length = 1000)
     private String hospitalDescription;
 
     private String hospitalPhone;
@@ -37,6 +39,9 @@ public class Hospital {
 
     @OneToMany(mappedBy = "hospital", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Doctor> doctors = new ArrayList<>();
+
+    @OneToMany(mappedBy = "hospital", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<HosServ> hosServs = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
