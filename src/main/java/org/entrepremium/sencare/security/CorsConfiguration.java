@@ -16,7 +16,7 @@ public class CorsConfiguration {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/**") // Enable CORS for the whole application
-                        .allowedOrigins("http://localhost:5173") // Allow your frontend origin
+                        .allowedOriginPatterns("*") // Allow all origins
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow these HTTP methods
                         .allowedHeaders("*") // Allow all headers
                         .allowCredentials(true); // Allow credentials
