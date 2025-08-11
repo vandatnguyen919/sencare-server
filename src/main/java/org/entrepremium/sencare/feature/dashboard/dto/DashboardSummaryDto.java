@@ -19,4 +19,5 @@ public class DashboardSummaryDto {
     private long totalOrders;
     private double revenue;
     private Map<String, Long> statusCounts; // PENDING, CONFIRMED, COMPLETED, CANCELLED
+    private long totalServicesBooked;
 }

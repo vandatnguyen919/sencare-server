@@ -31,4 +31,12 @@ public interface OrderRepository extends JpaRepository<Order, String> {
      @Query("SELECT o.status AS status, COUNT(o) AS count FROM Order o WHERE o.createdAt BETWEEN :start AND :end GROUP BY o.status")
      List<Object[]> countGroupByStatusBetween(@Param("start") LocalDateTime start,
                                               @Param("end") LocalDateTime end);
+
+    @Query("""
+    SELECT COUNT(o) 
+    FROM Order o
+    WHERE o.hosServ IS NOT NULL 
+      AND o.createdAt BETWEEN :start AND :end
+""")
+    long countServicesBookedBetween(LocalDateTime start, LocalDateTime end);
 }

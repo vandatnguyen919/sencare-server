@@ -64,13 +64,15 @@ public class DashboardService {
         double revenue = orderRepository.sumRevenueByStatusAndCreatedAtBetween(
                 Order.OrderStatus.COMPLETED, start, end
         );
-
         Map<String, Long> statusCounts = orderRepository.countGroupByStatusBetween(start, end)
                 .stream()
                 .collect(Collectors.toMap(
                         obj -> ((Order.OrderStatus) obj[0]).name(),
                         obj -> (Long) obj[1]
                 ));
+
+        // NEW: total services booked
+        long totalServicesBooked = orderRepository.countServicesBookedBetween(start, end);
 
         return DashboardSummaryDto.builder()
                 .unit(unit)
@@ -79,6 +81,8 @@ public class DashboardService {
                 .totalOrders(totalOrders)
                 .revenue(revenue != 0 ? revenue : 0.0)
                 .statusCounts(statusCounts)
+                .totalServicesBooked(totalServicesBooked) // NEW FIELD
                 .build();
+
     }
 }
