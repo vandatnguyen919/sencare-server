@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.entrepremium.sencare.feature.order.converter.OrderToOrderDtoConverter;
 import org.entrepremium.sencare.feature.order.dto.CreateOrderDto;
 import org.entrepremium.sencare.feature.order.dto.OrderDto;
+import org.entrepremium.sencare.feature.order.dto.UpdateAppointmentTimeDto;
 import org.entrepremium.sencare.system.Result;
+import org.entrepremium.sencare.system.StatusCode;
 import org.entrepremium.sencare.system.util.JwtUtils;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +26,7 @@ public class OrderController {
     private final OrderToOrderDtoConverter orderToOrderDtoConverter;
 
     @PostMapping
-    public ResponseEntity<Result> createOrder(
+    public Result createOrder(
             @RequestBody CreateOrderDto createOrderDto,
             JwtAuthenticationToken jwtAuthenticationToken
     ) {
@@ -35,12 +35,11 @@ public class OrderController {
 
         Order order = orderService.createOrder(userId, createOrderDto);
         OrderDto orderDto = orderToOrderDtoConverter.convert(order);
-        Result result = new Result(true, HttpStatus.CREATED.value(), "Add Success", orderDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        return new Result(true, StatusCode.SUCCESS, "Add Success", orderDto);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Result> getMyOrders(JwtAuthenticationToken jwtAuthenticationToken) {
+    public Result getMyOrders(JwtAuthenticationToken jwtAuthenticationToken) {
         String userId = JwtUtils.getUserId(jwtAuthenticationToken);
         log.info("Fetching orders for user: {}", userId);
 
@@ -48,35 +47,42 @@ public class OrderController {
         List<OrderDto> orderDtos = orders.stream()
                 .map(orderToOrderDtoConverter::convert)
                 .collect(Collectors.toList());
-        Result result = new Result(true, HttpStatus.OK.value(), "Find All Success", orderDtos);
-        return ResponseEntity.ok(result);
+        return new Result(true, StatusCode.SUCCESS, "Find All Success", orderDtos);
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<Result> getOrderById(@PathVariable String orderId) {
+    public Result getOrderById(@PathVariable String orderId) {
         Order order = orderService.getOrderById(orderId);
         OrderDto orderDto = orderToOrderDtoConverter.convert(order);
-        Result result = new Result(true, HttpStatus.OK.value(), "Find One Success", orderDto);
-        return ResponseEntity.ok(result);
+        return new Result(true, StatusCode.SUCCESS, "Find One Success", orderDto);
     }
 
     @GetMapping
-    public ResponseEntity<Result> getAllOrders() {
+    public Result getAllOrders() {
         List<Order> orders = orderService.getAllOrders();
         List<OrderDto> orderDtos = orders.stream()
                 .map(orderToOrderDtoConverter::convert)
                 .collect(Collectors.toList());
-        Result result = new Result(true, HttpStatus.OK.value(), "Find All Success", orderDtos);
-        return ResponseEntity.ok(result);
+        return new Result(true, StatusCode.SUCCESS, "Find All Success", orderDtos);
     }
 
     @PutMapping("/{orderId}/status")
-    public ResponseEntity<Result> updateOrderStatus(
+    public Result updateOrderStatus(
             @PathVariable String orderId,
             @RequestParam Order.OrderStatus status) {
         Order updatedOrder = orderService.updateOrderStatus(orderId, status);
         OrderDto orderDto = orderToOrderDtoConverter.convert(updatedOrder);
-        Result result = new Result(true, HttpStatus.OK.value(), "Update Success", orderDto);
-        return ResponseEntity.ok(result);
+        return new Result(true, StatusCode.SUCCESS, "Update Success", orderDto);
+    }
+
+    @PatchMapping("/{orderId}")
+    public Result updateAppointmentTime(
+            @PathVariable String orderId,
+            @RequestBody UpdateAppointmentTimeDto updateAppointmentTimeDto) {
+        log.info("Updating appointment time for order: {}", orderId);
+
+        Order updatedOrder = orderService.updateAppointmentTime(orderId, updateAppointmentTimeDto.getAppointmentTime());
+        OrderDto orderDto = orderToOrderDtoConverter.convert(updatedOrder);
+        return new Result(true, StatusCode.SUCCESS, "Update Success", orderDto);
     }
 }
