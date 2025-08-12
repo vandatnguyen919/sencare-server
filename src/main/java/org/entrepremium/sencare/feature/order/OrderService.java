@@ -120,6 +120,19 @@ public class OrderService {
     }
 
     @Transactional
+    public Order updateAppointmentTime(String orderId, String appointmentTime) {
+        log.info("Updating appointment time for order: {}", orderId);
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ObjectNotFoundException("Order", orderId));
+
+        order.setAppointmentTime(appointmentTime);
+        Order updatedOrder = orderRepository.save(order);
+        log.info("Appointment time updated successfully for order: {}", orderId);
+
+        return updatedOrder;
+    }
+
+    @Transactional
     public Order updateOrderStatus(String orderId, Order.OrderStatus status) {
         log.info("Updating order status for order: {} to status: {}", orderId, status);
         Order order = orderRepository.findById(orderId)
