@@ -6,6 +6,7 @@ import org.entrepremium.sencare.feature.order.converter.OrderToOrderDtoConverter
 import org.entrepremium.sencare.feature.order.dto.CreateOrderDto;
 import org.entrepremium.sencare.feature.order.dto.OrderDto;
 import org.entrepremium.sencare.feature.order.dto.UpdateAppointmentTimeDto;
+import org.entrepremium.sencare.feature.order.dto.UpdateOrderStatusDto;
 import org.entrepremium.sencare.system.Result;
 import org.entrepremium.sencare.system.StatusCode;
 import org.entrepremium.sencare.system.util.JwtUtils;
@@ -66,16 +67,16 @@ public class OrderController {
         return new Result(true, StatusCode.SUCCESS, "Find All Success", orderDtos);
     }
 
-    @PutMapping("/{orderId}/status")
+    @PatchMapping("/{orderId}/status")
     public Result updateOrderStatus(
             @PathVariable String orderId,
-            @RequestParam Order.OrderStatus status) {
-        Order updatedOrder = orderService.updateOrderStatus(orderId, status);
+            @RequestBody UpdateOrderStatusDto updateOrderStatusDto) {
+        Order updatedOrder = orderService.updateOrderStatus(orderId, updateOrderStatusDto.getStatus());
         OrderDto orderDto = orderToOrderDtoConverter.convert(updatedOrder);
         return new Result(true, StatusCode.SUCCESS, "Update Success", orderDto);
     }
 
-    @PatchMapping("/{orderId}")
+    @PatchMapping("/{orderId}/aptm-time")
     public Result updateAppointmentTime(
             @PathVariable String orderId,
             @RequestBody UpdateAppointmentTimeDto updateAppointmentTimeDto) {
