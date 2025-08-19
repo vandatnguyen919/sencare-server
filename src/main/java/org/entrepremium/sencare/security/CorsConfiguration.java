@@ -16,10 +16,10 @@ public class CorsConfiguration {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/**") // Enable CORS for the whole application
-                        .allowedOriginPatterns("*") // Allow all origins
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow these HTTP methods
+                        .allowedOrigins("*") // Allow all origins
+                        .allowedMethods("*") // Allow all HTTP methods
                         .allowedHeaders("*") // Allow all headers
-                        .allowCredentials(true); // Allow credentials
+                        .allowCredentials(false); // Disable credentials when allowing all origins
             }
         };
     }
